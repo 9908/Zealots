@@ -94,7 +94,7 @@ function love.draw()
 		
 		useDefaultFont()
 
-		-- local offsetX = 10
+		-- local offsetX = 10 --
 		-- local offsetY = 100
 		-- 	love.graphics.print("v_x: "..player.vit.x,100+offsetX,30+offsetY)
 		-- 	love.graphics.print("v_y: "..player.vit.y, 100+offsetX,40+offsetY)
