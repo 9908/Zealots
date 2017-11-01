@@ -166,18 +166,30 @@ function love.draw()
 	elseif GAME_STATE ==  "LOSE" then
 
 		love.graphics.draw(BG_IMG,0,0,0,3,3)
-		MASK_ANIM:draw(screenWidth/2,screenHeight/2-425,0, 3, 3,55,0)
+		MASK_ANIM:draw(screenWidth/2+400,screenHeight/2-300,0, 3, 3,55,0)
 
-		useCustomFont(60)
-		local offsetX = -35
+	 	drawShrineBot()
+	 	drawShrineTop()
+
+		useCustomFont(40)
+		local offsetX = -775
 		local offsetY = 200
 		love.graphics.setColor(9,33,22)
-		love.graphics.printf("You Lost Miserably",offsetX+screenWidth/2-200+4,offsetY+screenHeight/2+3,500,'center')
-		love.graphics.printf("Press space to restart",offsetX+screenWidth/2-200+4,offsetY+screenHeight/2+50+3,500,'center')
+		love.graphics.printf("You Lost Miserably",offsetX+screenWidth/2+4,offsetY+screenHeight/2+3,1500,'center')
+		love.graphics.printf("Press space to restart",offsetX+screenWidth/2+4,offsetY+screenHeight/2+50+3,1500,'center')
 		love.graphics.setColor(244,248,255 	)
-		love.graphics.printf("You Lost Miserably",offsetX+screenWidth/2-200,offsetY+screenHeight/2,500,'center')
-		love.graphics.printf("Press space to restart",offsetX+screenWidth/2-200,offsetY+screenHeight/2+50,500,'center')
+		love.graphics.printf("You Lost Miserably",offsetX+screenWidth/2+4,offsetY+screenHeight/2,1500,'center')
+		love.graphics.printf("Press space to restart",offsetX+screenWidth/2,offsetY+screenHeight/2+50,1500,'center')
 		
+
+		local offsetX = -1050
+		local offsetY = 200
+		useCustomFont(120)
+		love.graphics.setColor(9,33,22)
+		love.graphics.printf("SCORE:  "..score,offsetX+screenWidth/2-200+4,offsetY+screenHeight/3-100+3,1500,'center')
+		love.graphics.setColor(244,48,55 	)
+		love.graphics.printf("SCORE:  "..score,offsetX+screenWidth/2-200,offsetY+screenHeight/3-100,1500,'center')
+
 		useDefaultFont()
 		love.graphics.setColor(0,0,0)
 
