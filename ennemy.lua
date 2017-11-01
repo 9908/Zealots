@@ -171,8 +171,8 @@ function ShootThePlayer( v )
  
 	local angle = math.atan2((targetY - startY), (targetX - startX))
  
-	local bulletDx = bulletSpeed * math.cos(angle)
-	local bulletDy = bulletSpeed * math.sin(angle)
+	local bulletDx = 0.5*bulletSpeed * math.cos(angle)
+	local bulletDy = 0.5*bulletSpeed * math.sin(angle)
  
 	table.insert(v.bullets,{ pos = {x = startX, y = startY}, vit = {x = bulletDx, y = bulletDy}, w=5,h=5,anim = BULLET_FOE_ANIM})
 end
