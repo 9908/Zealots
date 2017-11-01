@@ -111,26 +111,25 @@ function love.draw()
 		
 		useDefaultFont()
 
-		-- local offsetX = 10 --
-		-- local offsetY = 100
-		-- 	love.graphics.print("v_x: "..player.vit.x,100+offsetX,30+offsetY)
-		-- 	love.graphics.print("v_y: "..player.vit.y, 100+offsetX,40+offsetY)
+		local offsetX = 10 --
+		local offsetY = 100
+			love.graphics.print("v_x: "..player.vit.x,100+offsetX,30+offsetY)
+			love.graphics.print("v_y: "..player.vit.y, 100+offsetX,40+offsetY)
 
-		-- 	love.graphics.print("a_x: "..player.acc.x,100+offsetX,60+offsetY)
-		-- 	love.graphics.print("a_y: "..player.acc.y, 100+offsetX,70+offsetY)
+			love.graphics.print("a_x: "..player.acc.x,100+offsetX,60+offsetY)
+			love.graphics.print("a_y: "..player.acc.y, 100+offsetX,70+offsetY)
 
-		-- 	love.graphics.print("pos_x: "..player.pos.x,100+offsetX,90+offsetY)
-		-- 	love.graphics.print("pos_y: "..player.pos.y, 100+offsetX,100+offsetY)
+			love.graphics.print("pos_x: "..player.pos.x,100+offsetX,90+offsetY)
+			love.graphics.print("pos_y: "..player.pos.y, 100+offsetX,100+offsetY)
 
-		-- 	love.graphics.print("player w: "..player.w,100+offsetX,110+offsetY)
-		-- 	love.graphics.print("player h: "..player.h, 100+offsetX,120+offsetY)
+			love.graphics.print("player w: "..player.w,100+offsetX,110+offsetY)
+			love.graphics.print("player h: "..player.h, 100+offsetX,120+offsetY)
 
-		-- 	love.graphics.print("camera shake_type: "..camera.shaketype, 100+offsetX,140+offsetY)
-		-- 	love.graphics.print("camera X: "..tostring(camera.x), 100+offsetX,150+offsetY)
-		-- 	love.graphics.print("camera Y: "..tostring(camera.y), 100+offsetX,160+offsetY)
-		-- 	love.graphics.print("camera shake Val: "..tostring(camera.shakeVal), 100+offsetX,170+offsetY)
+			love.graphics.print("camera shake_type: "..camera.shaketype, 100+offsetX,140+offsetY)
+			love.graphics.print("camera X: "..tostring(camera.x), 100+offsetX,150+offsetY)
+			love.graphics.print("camera Y: "..tostring(camera.y), 100+offsetX,160+offsetY)
+			love.graphics.print("camera shake Val: "..tostring(camera.shakeVal), 100+offsetX,170+offsetY)
 
-			--love.graphics.print("bullets_ennemy: "..tostring(table.getn(ennemies[1].bullets)), 100+offsetX,180+offsetY)
 
 
 
@@ -294,7 +293,6 @@ function restartGame()
 
 	-- Items
 	items = {}
-	newItem()
 
 	-- Crates
 	crates = {} 

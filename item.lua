@@ -36,8 +36,8 @@ function newItem()
 		local_x = 1420
 		local_y = 387
 	elseif rdm == 3 then
-		local_x = 78
-		local_y = 55
+		local_x = 345
+		local_y = 230
 	end
 
 	ITEM_ANIM = newAnimation(love.graphics.newImage("assets/item.png"), 16, 20, 0.2, 0)
