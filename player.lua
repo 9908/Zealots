@@ -2,7 +2,7 @@
 
    	--DRAW PLAYER
 
-    --love.graphics.rectangle("fill",player.pos.x-player.hitbox_w/2,player.pos.y-player.hitbox_h/2,player.hitbox_w,player.hitbox_h)
+    love.graphics.rectangle("fill",player.pos.x-player.hitbox_w/2,player.pos.y-player.hitbox_h/2,player.hitbox_w,player.hitbox_h)
 
 	love.graphics.draw(SHADOW_IMG,player.pos.x-1*player.w/5, player.pos.y+2*player.h/5, 0, 3, 3,0,0)
 
@@ -59,23 +59,23 @@ function updatePlayer(dt)
 
 	updateVelocity(player,dt)
 
-	if player.pos.x-player.w/2 < 0 then -- limit mvt out of screen left
-		player.pos.x = player.w/2
+	if player.pos.x-player.hitbox_w/2 < 0 then -- limit mvt out of screen left
+		player.pos.x = player.hitbox_w/2
 		player.vit.x = 0
 		player.acc.x = 0
 	end
-	if player.pos.x+player.w/2 > screenWidth then -- limit mvt out of screen right
-		player.pos.x = screenWidth - player.w/2
+	if player.pos.x+player.hitbox_w/2 > screenWidth then -- limit mvt out of screen right
+		player.pos.x = screenWidth - player.hitbox_w/2
 		player.vit.x = 0
 		player.acc.x = 0
 	end
-	if player.pos.y-player.h/2 < 0 then -- limit mvt out of screen top
-		player.pos.y = player.h/2
+	if player.pos.y-player.hitbox_h/2 < 0 then -- limit mvt out of screen top
+		player.pos.y = player.hitbox_h/2
 		player.vit.y = 0
 		player.acc.y = 0
 	end
-	if player.pos.y+player.h/2 > screenHeight then -- limit mvt out of screen bottom
-		player.pos.y = screenHeight - player.h/2.
+	if player.pos.y+player.hitbox_h/2 > screenHeight then -- limit mvt out of screen bottom
+		player.pos.y = screenHeight - player.hitbox_h/2
 		player.vit.y = 0
 		player.acc.y = 0
 	end
