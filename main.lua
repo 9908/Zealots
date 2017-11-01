@@ -295,5 +295,4 @@ function restartGame()
 	SFX:setVolume(2)
 	SFX:play()
 
-	SummonEnnemies(0, math.randomy,1)
 end
