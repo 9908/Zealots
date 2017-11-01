@@ -22,6 +22,7 @@ require ("middleclass")
 require ("middleclass")
 
 GAME_STATE = "START_MENU" -- START_MENU, PLAY - LOSE - WIN
+SHOW_GRID = false
 
 TILE_W = 16*3
 TILE_H = 16*3
@@ -72,6 +73,19 @@ function love.draw()
 		-- love.graphics.circle("fill",shrine.pos.x,shrine.pos.y+60,150)
 		-- love.graphics.setColor(255,255,255)
 
+			-- DRAW ASTAR GRID
+		if SHOW_GRID == true then
+			for i,v in ipairs(handler.tiles) do 
+				for j,w in ipairs(v) do
+				love.graphics.setColor(164,152,164)
+				love.graphics.line( 0,		i*16*3, I_max*16*3, i*16*3 )
+				love.graphics.line( j*16*3,	0, 		j*16*3,		J_max*16*3 )
+				end
+			end	
+		end
+
+		love.graphics.setColor(255,255,255)
+		
 		drawCrates()
 	 	drawShrineBot()
 		drawItems()
@@ -116,18 +130,18 @@ function love.draw()
 			--love.graphics.print("bullets_ennemy: "..tostring(table.getn(ennemies[1].bullets)), 100+offsetX,180+offsetY)
 
 
-			-- DRAW ASTAR GRID
+
 		-- for i,v in ipairs(handler.tiles) do 
-		-- 	for j,w in ipairs(v) do
-		-- 		if w == 0 then
-		-- 			love.graphics.setColor(255,255,255)
-		-- 			love.graphics.circle("fill",(j-0.5)*16*3,(i-0.5)*16*3,5)
-		-- 		elseif w == 1 then
-		-- 			love.graphics.setColor(0,0,0)
-		-- 			love.graphics.circle("fill",(j-0.5)*16*3,(i-0.5)*16*3,5)
-		-- 		end
-		-- 	end
-		-- end	
+			-- 	for j,w in ipairs(v) do
+			-- 		if w == 0 then
+			-- 			love.graphics.setColor(255,255,255)
+			-- 			love.graphics.circle("fill",(j-0.5)*16*3,(i-0.5)*16*3,5)
+			-- 		elseif w == 1 then
+			-- 			love.graphics.setColor(0,0,0)
+			-- 			love.graphics.circle("fill",(j-0.5)*16*3,(i-0.5)*16*3,5)
+			-- 		end
+			-- 	end
+			-- end	
 		-- for i,v in ipairs(path_test) do
 		-- 	love.graphics.setColor(255,0,0)
 		-- 	love.graphics.circle("fill",(v.location.x-0.5)*16*3,(v.location.y-0.5)*16*3,5)
@@ -255,7 +269,7 @@ function restartGame()
 			direction = -1, -- "1=right", "-1=left"
 
 			bullets = {},
-			crates_nbr = 227,
+			crates_nbr = 8,
 
 			anim_idle = PLAYER_idle,
 			anim_walk = PLAYER_walk,

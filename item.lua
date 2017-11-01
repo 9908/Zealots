@@ -11,7 +11,7 @@ end
 function updateItems(dt)
 	for i,v in ipairs(items) do  -- pick up item
     	if distance(v.pos.x,v.pos.y,player.pos.x,player.pos.y) < 35 then
-    		player.crates_nbr = player.crates_nbr + 5
+    		player.crates_nbr = player.crates_nbr + 8
 
     		pop_pickup_anim(v.pos.x-15,v.pos.y-15)
     		pickup_item_SFX:play()

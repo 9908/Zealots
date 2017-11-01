@@ -48,6 +48,8 @@ function camera:update( dt )
       end
       if camera.shakeVal > 4*math.pi then
         camera.shake = false
+        camera.x = 0
+        camera.y = 0
         camera.shakeX = 0
         camera.shakeY = 0
         camera.shakeVal = 0
@@ -64,6 +66,8 @@ function camera:update( dt )
       end
       if camera.shakeVal > 4*math.pi then
         camera.shake = false
+        camera.x = 0
+        camera.y = 0
         camera.shakeX = 0
         camera.shakeY = 0
         camera.shakeVal = 0

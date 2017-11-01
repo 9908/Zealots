@@ -1,36 +1,44 @@
 ﻿
 
 ----- Input
-function love.mousepressed(x, y, button)
+function love.mousepressed(loc_x, loc_y, button)
 	if GAME_STATE == 'PLAY' then
 		if button == 1 then -- shoot
-			pop_pickup_anim(x-12,y-12)
+			pop_pickup_anim(loc_x-12,loc_y-12)
 			local startX = player.pos.x 
 			local startY = player.pos.y 
-			local mouseX = x
-			local mouseY = y
+			local mouseX = loc_x
+			local mouseY = loc_y
 	 
 			local angle = math.atan2((mouseY - startY), (mouseX - startX))
 	 
 			local bulletDx = 2.5*bulletSpeed * math.cos(angle)
-			local bulletDy = 2.5*	bulletSpeed * math.sin(angle)
+			local bulletDy = 2.5*bulletSpeed * math.sin(angle)
 
 			local shoot_SFX = love.audio.newSource("assets/sounds/shoot.wav", "static")
 			shoot_SFX:setVolume(0.6)
 			shoot_SFX:play()
 			table.insert(player.bullets,{ pos = {x = startX, y = startY}, vit = {x = bulletDx, y = bulletDy}, w=7,h=7,anim = BULLET_ANIM})
 		elseif button == 2 then -- place crate
-			local mouseX = x
-			local mouseY = y
+
 	 
-			if player.crates_nbr > 0 then
-				newBox(x,y)
-			end	
+	 		SHOW_GRID = true
+
 		end
 	end
 end
 
 
+function love.mousereleased(loc_x, loc_y, button)
+	if button == 2 then 
+	 	SHOW_GRID = false
+	 	local mouseX = loc_x
+		local mouseY = loc_y
+		if player.crates_nbr > 0 then
+			newBox(mouseX,mouseY)
+		end				
+	end
+end
 function love.keypressed (key)
 
    if key == 'escape' then
