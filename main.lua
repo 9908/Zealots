@@ -116,6 +116,7 @@ function love.draw()
 			--love.graphics.print("bullets_ennemy: "..tostring(table.getn(ennemies[1].bullets)), 100+offsetX,180+offsetY)
 
 
+			-- DRAW ASTAR GRID
 		-- for i,v in ipairs(handler.tiles) do 
 		-- 	for j,w in ipairs(v) do
 		-- 		if w == 0 then
@@ -254,7 +255,7 @@ function restartGame()
 			direction = -1, -- "1=right", "-1=left"
 
 			bullets = {},
-			crates_nbr = 7,
+			crates_nbr = 227,
 
 			anim_idle = PLAYER_idle,
 			anim_walk = PLAYER_walk,

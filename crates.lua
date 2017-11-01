@@ -15,7 +15,22 @@ end
 function updateCrates(dt)
 	 for i,v in ipairs(crates) do  -- Draw ceates
     	if v.health < 0 then
+    		local index_i = v.i
+    		local index_j = v.j
     		table.remove(crates,i)
+
+    		-- update map
+			handler:updateMap(index_i,index_j,0)
+
+			-- update paths of ennemies
+			for ii,vv in ipairs(ennemies) do  -- check if there is already a crate there	
+				if vv.IA == 1 then
+    				vv.path = computePathtoGoal(vv.pos,shrine)
+    			else 
+    				vv.path = computePathtoGoal(vv.pos,player)  
+    			end
+			end
+
     	end
 	end
 end
@@ -53,7 +68,7 @@ function newBox( x,y )
 		table.insert(anims,{ x = posx-34, y = posy-36 , animation = animImg, scaleX =3, scaleY = 3,loop=false,angle=0})
 		
 		-- update map
-		handler:updateMap(index_i,index_j)
+		handler:updateMap(index_i,index_j,1)
 
 		-- update paths of ennemies
 		for i,v in ipairs(ennemies) do  -- check if there is already a crate there	

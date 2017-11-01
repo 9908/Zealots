@@ -35,9 +35,9 @@ function TiledMapHandler:initialize()
   }
 end
 
-function TiledMapHandler:updateMap(index_i,index_j)
+function TiledMapHandler:updateMap(index_i,index_j,value)
   
-  self.tiles[index_j][index_i] = 1
+  self.tiles[index_j][index_i] = value
 end
 
 function TiledMapHandler:getNode(location)
