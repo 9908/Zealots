@@ -2,7 +2,7 @@
 
    	--DRAW PLAYER
 
-    love.graphics.rectangle("fill",player.pos.x-player.hitbox_w/2,player.pos.y-player.hitbox_h/2,player.hitbox_w,player.hitbox_h)
+    --love.graphics.rectangle("fill",player.pos.x-player.hitbox_w/2,player.pos.y-player.hitbox_h/2,player.hitbox_w,player.hitbox_h)
 
 	love.graphics.draw(SHADOW_IMG,player.pos.x-1*player.w/5, player.pos.y+2*player.h/5, 0, 3, 3,0,0)
 
@@ -116,6 +116,7 @@ function updatePlayer(dt)
 			table.remove(player.bullets,i)
 		end
 	end
+
 
 
 	-- ANIM

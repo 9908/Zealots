@@ -237,7 +237,10 @@ function SummonEnnemies(local_x,local_y,nbr) -- Spawn new Ennemies
 			praying = false,
 			bullets = {},	
 			canShoot = true,
-			timerStart = love.timer.getTime()
+
+			timerStartDust = love.timer.getTime(),
+			DELAY_POP_DUST = 0.19,
+			popdust = true
 	}
 	table.insert(ennemies, newEnnemy)
 	end

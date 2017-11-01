@@ -1,4 +1,3 @@
-wave = 0 							-- Current wave numbering
 start_new_wave = true
 TIME_START_WAVE = 3 				-- Time between message display and ennemy spawn
 

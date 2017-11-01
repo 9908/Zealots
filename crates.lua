@@ -63,10 +63,7 @@ function newBox( x,y )
 			health = 5}
 		)
 		
-		animImg = newAnimation(love.graphics.newImage("assets/box-pop.png"), 23,23, 0.05, 0)
-		animImg:setMode("once")
-		table.insert(anims,{ x = posx-34, y = posy-36 , animation = animImg, scaleX =3, scaleY = 3,loop=false,angle=0})
-		
+		pop_crate_anim(posx,posy)
 		-- update map
 		handler:updateMap(index_i,index_j,1)
 

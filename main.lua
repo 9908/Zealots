@@ -40,6 +40,8 @@ bulletSpeed = 500
 bullet_reload = 4
 
 score = 0
+wave = 0 							-- Current wave numbering
+		
 
 SHRINE_POS = {x = (I_max-1)/2 , y=(J_max-1)/2 }
 function love.load()
@@ -86,13 +88,14 @@ function love.draw()
 
 		love.graphics.setColor(255,255,255)
 		
-		drawCrates()
 	 	drawShrineBot()
+		drawFXBot()
+		drawCrates()
 		drawItems()
 		drawEnnemies()
 	 	drawPlayer()
 	 	drawShrineTop()
-		drawFX()
+		drawFXTop()
 		drawMessages()
 
 		love.graphics.setColor(0,0,0)
@@ -280,7 +283,9 @@ function restartGame()
 
 			dead = false,
 
-			timerStart = love.timer.getTime()
+			timerStartDust = love.timer.getTime(),
+			DELAY_POP_DUST = 0.06,
+			popdust = true
 
 		}
 
@@ -293,6 +298,9 @@ function restartGame()
 
 	-- Crates
 	crates = {} 
+
+	-- Anims
+	anims = {}
 
 	shrine = {
 			pos = {x = SHRINE_POS.x*TILE_W, y = SHRINE_POS.y*TILE_W}, -- position

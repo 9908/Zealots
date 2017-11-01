@@ -88,8 +88,22 @@ function updateVelocity(v,dt)
 	v.vit.x=v.vit.x*math.pow(friction_mu,dt)
 	v.vit.y=v.vit.y*math.pow(friction_mu,dt)
 
+	-- DUST ANIM
+		-- TIMERS
 
-		--pop_dust_anim(v.pos.x,v.pos.y)
+	if love.timer.getTime() - v.timerStartDust > v.DELAY_POP_DUST and v.popdust == false then
+
+		v.popdust = true
+	end
+
+	if v.popdust == true then
+		if math.sqrt(v.vit.x * v.vit.x + v.vit.y * v.vit.y) > 10 then
+			pop_dust_anim(v.pos.x,v.pos.y+v.h/2,v.direction)
+		end
+		v.popdust = false
+		v.timerStartDust = love.timer.getTime() 
+	end
+
 
 
 end

@@ -13,7 +13,7 @@ function loadImg()
 	PLAYER_idle = newAnimation(love.graphics.newImage("assets/player_idle.png"), 12, 22, 0.1, 0)
 	PLAYER_idle:setMode("loop")
 
-	PLAYER_walk = newAnimation(love.graphics.newImage("assets/player_walk.png"), 12, 22, 0.1, 0)
+	PLAYER_walk = newAnimation(love.graphics.newImage("assets/player_walk.png"), 12, 22, 0.08, 0)
 	PLAYER_walk:setMode("loop")
 
 	BOX_IMG = love.graphics.newImage('assets/box.png')
@@ -103,7 +103,7 @@ function pop_hit_anim(x,y,vx,vy)
 	local angle_loc = math.atan2(vy*10, vx*10)
 	animImg = newAnimation(love.graphics.newImage("assets/hit_anim.png"), 11,11, 0.05, 0)
 	animImg:setMode("once")				
-	table.insert(anims,{ x = x, y = y , animation = animImg, scaleX =3, scaleY = 3,loop=false,angle = 0}) -- NO ROTATION
+	table.insert(anims,{ pos={x = x, y = y }, vit = {x=0,y=0}, animation = animImg, scaleX =3, scaleY = 3,loop=false,angle = 0,display_top = true}) -- NO ROTATION
 
 	local hit_impact_SFX = love.audio.newSource("assets/sounds/hit_impact.wav", "static")
 	hit_impact_SFX:setVolume(0.6)
@@ -113,32 +113,45 @@ function pop_hit_anim(x,y,vx,vy)
 	camera.shaketype = "shooting"
 end
 
-function pop_dust_anim(x,y)
+
+function pop_crate_anim(posx,posy)
+	animImg = newAnimation(love.graphics.newImage("assets/box-pop.png"), 23,23, 0.05, 0)
+	animImg:setMode("once")
+	table.insert(anims,{ pos={x = posx-34, y = posy-36}, vit={x=0,y=0} , animation = animImg, scaleX =3, scaleY = 3,loop=false,angle=0,display_top = true})
+		
+end
+
+function pop_dust_anim(x,y,dir)
 	--local angle_loc = math.atan2(vy*10, vx*10)
-	animImg = newAnimation(love.graphics.newImage("assets/dust.png"), 11,11, 0.07, 0)
+	animImg = newAnimation(love.graphics.newImage("assets/dust.png"), 11,11, 0.09, 0)
 	animImg:setMode("once")				
-	table.insert(anims,{ x = x-5, y = y+5 , animation = animImg, scaleX =3, scaleY = 3,loop=false,angle = 0})
+	local dis_top = true	
+	if math.random(2) == 2 then 
+		dis_top = false		
+	end
+
+	table.insert(anims,{ pos = {x = x-11, y = y-14 }, vit = {x=-dir*math.random(80),y=-math.random(80)},animation = animImg, scaleX =3, scaleY = 3,loop=false,angle = 0,display_top = dis_top})
 end
 
 function pop_pickup_anim(x,y)
 	
 	animImg = newAnimation(love.graphics.newImage("assets/pickup.png"), 11,11, 0.05, 0)
 	animImg:setMode("once")
-	table.insert(anims,{ x = x, y = y , animation = animImg, scaleX =3, scaleY = 3,loop=false})
+	table.insert(anims,{ pos={x = x, y = y },  vit = {x=0,y=0},animation = animImg, scaleX =3, scaleY = 3,loop=false,angle = 0, display_top = true})
 end
 
 function pop_bullet_trail_anim(x,y)
 	--local angle_loc = math.atan2(vy*10, vx*10)
 	animImg = newAnimation(love.graphics.newImage("assets/bullet_trail.png"), 7,7, 0.045, 0)
-	animImg:setMode("once")				
-	table.insert(anims,{ x = x, y = y , animation = animImg, scaleX =3, scaleY = 3,loop=false,angle = 0})
+	animImg:setMode("once")		
+	table.insert(anims,{ pos={x = x, y = y} , vit = {x=0,y=0}, animation = animImg, scaleX =3, scaleY = 3,loop=false,angle = 0,display_top = false})
 end
 
 function pop_foe_bullet_trail_anim(x,y)
 	--local angle_loc = math.atan2(vy*10, vx*10)
 	animImg = newAnimation(love.graphics.newImage("assets/bullet_foe_trail.png"), 7,7, 0.07, 0)
 	animImg:setMode("once")				
-	table.insert(anims,{ x = x, y = y , animation = animImg, scaleX =3, scaleY = 3,loop=false,angle = 0})
+	table.insert(anims,{pos={ x = x, y = y }, vit = {x=0,y=0} ,animation = animImg, scaleX =3, scaleY = 3,loop=false,angle = 0,display_top = false})
 end
 
 function pop_foe_death_anim(x,y,dir,typeIA)
@@ -157,9 +170,9 @@ function pop_foe_death_anim(x,y,dir,typeIA)
 
 	animImg:setMode("once")				
 	if dir == 1 then
-		table.insert(anims,{ x = x-3*9, y = y - 3*13 , animation = animImg, scaleX =3, scaleY = 3,loop=false,angle = 0})
+		table.insert(anims,{ pos={x = x-3*9, y = y - 3*13} , vit = {x=0,y=0},animation = animImg, scaleX =3, scaleY = 3,loop=false,angle = 0,display_top = true})
 	else
-		table.insert(anims,{ x = x+3*9, y = y-3*13 , animation = animImg, scaleX =-3, scaleY = 3,loop=false,angle = 0})
+		table.insert(anims,{pos={ x = x+3*9, y = y-3*13 }, vit = {x=0,y=0} ,animation = animImg, scaleX =-3, scaleY = 3,loop=false,angle = 0,display_top = true})
 	end
 end
 
@@ -168,6 +181,8 @@ function updateFX(dt)
 	-- Update animations
 	for i, anim in ipairs(anims) do
 		anim.animation:update(dt) 
+		anim.pos.x = anim.pos.x + anim.vit.x * dt
+		anim.pos.y = anim.pos.y + anim.vit.y * dt
 		if anim.animation:getCurrentFrame() == anim.animation:getSize() and anim.loop == false then
 			table.remove(anims,i)
 		end
@@ -202,11 +217,13 @@ function updateFX(dt)
 	-- end
 end
 
-function drawFX()
+function drawFXTop()
 
 	-- Draw Animations
 	for i, anim in ipairs(anims) do
-		anim.animation:draw(anim.x,anim.y,anim.angle,anim.scaleX,anim.scaleY,0,0)
+		if anim.display_top == true then
+			anim.animation:draw(anim.pos.x,anim.pos.y,anim.angle,anim.scaleX,anim.scaleY,0,0)
+		end
 	end
 
 	-- Draw flicker
@@ -215,6 +232,17 @@ function drawFX()
 		love.graphics.rectangle("fill", camera.x, camera.y, screenWidth, screenHeight)
 		love.graphics.setColor(255,255,255)
 	end
+end
+
+function drawFXBot()
+
+	-- Draw Animations
+	for i, anim in ipairs(anims) do
+		if anim.display_top == false then
+			anim.animation:draw(anim.pos.x,anim.pos.y,anim.angle,anim.scaleX,anim.scaleY,0,0)
+		end
+	end
+
 end
 
 function  drawArt( )
