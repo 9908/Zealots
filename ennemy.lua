@@ -116,7 +116,6 @@ function updateEnnemies(dt)
 
 			updateVelocity(v,dt)
 		else -- PRAYING
-			shrine.loaded = shrine.loaded + 0.1*dt
 			shrine.being_prayed = true
 		end
 

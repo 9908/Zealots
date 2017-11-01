@@ -37,6 +37,9 @@ function updateShrine(dt)
 	shrine.anim_top:update(dt)
 	shrine.anim_bot:update(dt)
 
+	if shrine.being_prayed == true then 	
+		shrine.loaded = shrine.loaded + 0.1*dt
+	end
 	if shrine.loaded > 1 then
 		GAME_STATE = "LOSE"
 	end
