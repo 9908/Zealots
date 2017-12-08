@@ -52,8 +52,12 @@ function love.keypressed (key)
    -- elseif key == "down" then
    -- 		applyforceY(player,100)
    end
-   if key == 'space' and (GAME_STATE == "START_MENU" or GAME_STATE == "LOSE") then
-   		restartGame()
+   if key == 'space' then
+   		if (GAME_STATE == "START_MENU" or GAME_STATE == "LOSE") then
+   			restartGame()
+   		elseif GAME_STATE == "PLAY" then
+   			start_new_wave_pressed = true
+   		end
 	end
 
 end

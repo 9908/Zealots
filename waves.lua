@@ -1,4 +1,5 @@
 start_new_wave = true
+start_new_wave_pressed = false
 TIME_START_WAVE = 3 				-- Time between message display and ennemy spawn
 
 timerStartWaves = love.timer.getTime() 	
@@ -12,10 +13,11 @@ function updateWave(dt) -- Update the wave system
 		start_new_wave = true
 	end
 
-	if table.getn(ennemies) == 0 and start_new_wave then
+	if table.getn(ennemies) == 0 and start_new_wave_pressed then
 		addBigMessage("Wave no."..(wave+1),40)
 		newItem()
 		start_new_wave = false
+		start_new_wave_pressed = false
 		timerStartWaves = love.timer.getTime() 
 
 	end

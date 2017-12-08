@@ -42,6 +42,8 @@ bullet_reload = 4
 score = 0
 wave = 0 							-- Current wave numbering
 		
+time = 0		
+txt_size = 60 + 20*math.sin(time)
 
 SHRINE_POS = {x = (I_max-1)/2 , y=(J_max-1)/2 }
 function love.load()
@@ -98,37 +100,53 @@ function love.draw()
 		drawFXTop()
 		drawMessages()
 
-		love.graphics.setColor(0,0,0)
-		love.graphics.print("Score: "..score,30+2,110+2)
-		love.graphics.setColor(255,255,255)
-		love.graphics.print("Score: "..score,30,110)
+		-- love.graphics.setColor(0,0,0)
+		-- love.graphics.print("Score: "..score,30+2,110+2)
+		-- love.graphics.setColor(255,255,255)
+		-- love.graphics.print("Score: "..score,30,110)
 
 
 		love.graphics.setColor(0,0,0)
-		love.graphics.print("Boxes: "..player.crates_nbr,30+2,160+2)
-		love.graphics.setColor(255,255,255)
-		love.graphics.print("Boxes: "..player.crates_nbr,30,160)
+		love.graphics.print("Crates: "..player.crates_nbr,30+2,80+2)
+		if player.crates_nbr == 0 then
+			love.graphics.setColor(255,25,1)
+		else
+			love.graphics.setColor(255,255,255)
+		end
+		love.graphics.print("Crates: "..player.crates_nbr,30,80)
+
+
+		local offsetX = -775
+		local offsetY = 200
+		if start_new_wave == true and start_new_wave_pressed == false and table.getn(ennemies) == 0 then
+
+			useCustomFont(txt_size)
+			love.graphics.setColor(9,33,22)
+			love.graphics.printf("Press space to continue",offsetX+screenWidth/2+4,offsetY+screenHeight/2+50+3,1500,'center')
+			love.graphics.setColor(244,248,255)
+			love.graphics.printf("Press space to continue",offsetX+screenWidth/2,offsetY+screenHeight/2+50,1500,'center')
+		end
 		
 		useDefaultFont()
 
-		local offsetX = 10 --
-		local offsetY = 100
-			love.graphics.print("v_x: "..player.vit.x,100+offsetX,30+offsetY)
-			love.graphics.print("v_y: "..player.vit.y, 100+offsetX,40+offsetY)
+		-- local offsetX = 10 --
+		-- local offsetY = 100
+		-- 	love.graphics.print("v_x: "..player.vit.x,100+offsetX,30+offsetY)
+		-- 	love.graphics.print("v_y: "..player.vit.y, 100+offsetX,40+offsetY)
 
-			love.graphics.print("a_x: "..player.acc.x,100+offsetX,60+offsetY)
-			love.graphics.print("a_y: "..player.acc.y, 100+offsetX,70+offsetY)
+		-- 	love.graphics.print("a_x: "..player.acc.x,100+offsetX,60+offsetY)
+		-- 	love.graphics.print("a_y: "..player.acc.y, 100+offsetX,70+offsetY)
 
-			love.graphics.print("pos_x: "..player.pos.x,100+offsetX,90+offsetY)
-			love.graphics.print("pos_y: "..player.pos.y, 100+offsetX,100+offsetY)
+		-- 	love.graphics.print("pos_x: "..player.pos.x,100+offsetX,90+offsetY)
+		-- 	love.graphics.print("pos_y: "..player.pos.y, 100+offsetX,100+offsetY)
 
-			love.graphics.print("player w: "..player.w,100+offsetX,110+offsetY)
-			love.graphics.print("player h: "..player.h, 100+offsetX,120+offsetY)
+		-- 	love.graphics.print("player w: "..player.w,100+offsetX,110+offsetY)
+		-- 	love.graphics.print("player h: "..player.h, 100+offsetX,120+offsetY)
 
-			love.graphics.print("camera shake_type: "..camera.shaketype, 100+offsetX,140+offsetY)
-			love.graphics.print("camera X: "..tostring(camera.x), 100+offsetX,150+offsetY)
-			love.graphics.print("camera Y: "..tostring(camera.y), 100+offsetX,160+offsetY)
-			love.graphics.print("camera shake Val: "..tostring(camera.shakeVal), 100+offsetX,170+offsetY)
+		-- 	love.graphics.print("camera shake_type: "..camera.shaketype, 100+offsetX,140+offsetY)
+		-- 	love.graphics.print("camera X: "..tostring(camera.x), 100+offsetX,150+offsetY)
+		-- 	love.graphics.print("camera Y: "..tostring(camera.y), 100+offsetX,160+offsetY)
+		-- 	love.graphics.print("camera shake Val: "..tostring(camera.shakeVal), 100+offsetX,170+offsetY)
 
 
 
@@ -173,6 +191,19 @@ function love.draw()
 		love.graphics.printf("Zealots",screenWidth/2-500,screenHeight/2-400,1000,'center')
 		useCustomFont(60)
 		love.graphics.printf("Press space to start",screenWidth/2-760,screenHeight/2+350,1500,'center')
+
+
+		useCustomFont(40)
+		local offsetX = -175
+		local offsetY = 100
+		love.graphics.setColor(9,33,22)
+		love.graphics.printf("WASD to move",offsetX+screenWidth/2+4,offsetY+screenHeight/2+3,1500,'center')
+		love.graphics.printf("Left click to shoot",offsetX+screenWidth/2+4,offsetY+screenHeight/2+50+3,1500,'center')
+		love.graphics.printf("Right click to place crate",offsetX+screenWidth/2+4,offsetY+screenHeight/2+100+3,1500,'center')
+		love.graphics.setColor(244,248,255 	)
+		love.graphics.printf("WASD to move",offsetX+screenWidth/2+4,offsetY+screenHeight/2+3,1500,'center')
+		love.graphics.printf("Left click to shoot",offsetX+screenWidth/2+4,offsetY+screenHeight/2+50+3,1500,'center')
+		love.graphics.printf("Right click to place crate",offsetX+screenWidth/2+4,offsetY+screenHeight/2+100+3,1500,'center')
 
 		love.graphics.setColor(0,0,0)
  		love.graphics.draw(MENU_TILE_IMG,0,21, 0, 3, 3, 0,0)
@@ -232,7 +263,12 @@ function love.update(dt)
 		love.timer.sleep(1/60 - dt)
 	end
 
+	time = time+5*dt
+	if time > 2*math.pi then
+		time = 0
+	end
 
+	txt_size = 40 + 10*math.sin(time)
 	if GAME_STATE == "PLAY" then 
 		updateShrine(dt)
 		updatePlayer(dt)
