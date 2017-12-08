@@ -116,15 +116,13 @@ function love.draw()
 		love.graphics.print("Crates: "..player.crates_nbr,30,80)
 
 
-		local offsetX = -775
-		local offsetY = 200
 		if start_new_wave == true and start_new_wave_pressed == false and table.getn(ennemies) == 0 then
 
 			useCustomFont(txt_size)
 			love.graphics.setColor(9,33,22)
-			love.graphics.printf("Press space to continue",offsetX+screenWidth/2+4,offsetY+screenHeight/2+50+3,1500,'center')
+			love.graphics.printf("Press space to continue",screenWidth/3.25+4,screenHeight/1.8+4,500,'center')
 			love.graphics.setColor(244,248,255)
-			love.graphics.printf("Press space to continue",offsetX+screenWidth/2,offsetY+screenHeight/2+50,1500,'center')
+			love.graphics.printf("Press space to continue",screenWidth/3.25,screenHeight/1.8,500,'center')
 		end
 		
 		useDefaultFont()
@@ -213,7 +211,7 @@ function love.draw()
 
 	elseif GAME_STATE ==  "LOSE" then
 
-		love.graphics.draw(BG_IMG,0,0,0,3,3)
+		--love.graphics.draw(BG_IMG,CAM_X0/2,CAM_Y0/2,0,3,3)
 		MASK_ANIM:draw(screenWidth/2+400,screenHeight/2-300,0, 3, 3,55,0)
 
 	 	drawShrineBot()

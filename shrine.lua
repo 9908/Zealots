@@ -14,11 +14,13 @@
 	end
 
 	-- Loading bar
-	love.graphics.setColor(246,250,240)
-	love.graphics.rectangle("fill",shrine.pos.x-100,shrine.pos.y-140,200,20)
-	love.graphics.setColor(247,25,4)
-	love.graphics.rectangle("fill",shrine.pos.x-95,shrine.pos.y-135,shrine.loaded*180,10)
-	love.graphics.setColor(255,255,255)
+	if not(GAME_STATE ==  "LOSE") then
+		love.graphics.setColor(246,250,240)
+		love.graphics.rectangle("fill",shrine.pos.x-100,shrine.pos.y-140,200,20)
+		love.graphics.setColor(247,25,4)
+		love.graphics.rectangle("fill",shrine.pos.x-95,shrine.pos.y-135,shrine.loaded*180,10)
+		love.graphics.setColor(255,255,255)
+	end
 end
 
 function drawShrineTop()

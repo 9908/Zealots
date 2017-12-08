@@ -13,9 +13,9 @@ function love.conf(t)
 	t.console = true
 	t.title = "My Project"
 	t.author = "Suladan"
-	t.window.fullscreen = false
+	t.window.fullscreen = true
 	t.window.vsync = true
 	t.window.fsaa = 0
-	t.window.height = 20*16*3 	-- Works for x2 and x3 but not x1. Some elements like enemy spawn are modified by this value
-	t.window.width = 36*16*3		
+	--t.window.height = 20*16*3 	-- Works for x2 and x3 but not x1. Some elements like enemy spawn are modified by this value
+	--t.window.width = 36*16*3		
 end

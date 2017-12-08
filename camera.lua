@@ -1,6 +1,8 @@
+CAM_X0 = (36*16*3 - love.graphics.getWidth())/2
+CAM_Y0 = (20*16*3 - love.graphics.getHeight())/2
 camera = {}
-camera.x = 0
-camera.y = 0
+camera.x = CAM_X0
+camera.y = CAM_Y0
 camera.sx = 1
 camera.sy = 1
 camera.rotation = 0
@@ -48,8 +50,8 @@ function camera:update( dt )
       end
       if camera.shakeVal > 4*math.pi then
         camera.shake = false
-        camera.x = 0
-        camera.y = 0
+        camera.x = CAM_X0
+        camera.y = CAM_Y0
         camera.shakeX = 0
         camera.shakeY = 0
         camera.shakeVal = 0
@@ -66,8 +68,8 @@ function camera:update( dt )
       end
       if camera.shakeVal > 4*math.pi then
         camera.shake = false
-        camera.x = 0
-        camera.y = 0
+        camera.x = CAM_X0
+        camera.y = CAM_Y0
         camera.shakeX = 0
         camera.shakeY = 0
         camera.shakeVal = 0
@@ -107,7 +109,7 @@ end
 
 function camera:setX(value)
   local mapWidth = screenWidth*self.sx
-  local posScreenX = 0
+  local posScreenX = X0
 
   if self._bounds then
     self.x = math.clamp(posScreenX + self.shakeX , self._bounds.x1, self._bounds.x2)
@@ -118,7 +120,7 @@ end
 
 function camera:setY(value)
   local mapHeight = screenHeight*self.sy
-  local posScreenY = 0
+  local posScreenY = Y0
   if self._bounds then
     self.y = math.clamp(posScreenY + self.shakeY , self._bounds.y1, self._bounds.y2)
   else
