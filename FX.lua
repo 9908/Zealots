@@ -56,7 +56,7 @@ function loadImg()
 	FOE_BULLET_TRAIL_ANIM_IMG = love.graphics.newImage("assets/bullet_foe_trail.png")
 	FOE1_DEATH_ANIM_IMG = love.graphics.newImage("assets/foe1_death.png")
 	FOE2_DEATH_ANIM_IMG = love.graphics.newImage("assets/foe2_death.png")
-
+	BLOB_DEATH_ANIM_IMG = love.graphics.newImage("assets/blob_death.png")
 	-- for i = 1,5 do
 	-- 	for j = 1,5 do
 
@@ -184,15 +184,26 @@ function pop_foe_death_anim(x,y,dir,typeIA)
 	local animImg
 	if typeIA == 1 then
 		animImg = newAnimation(FOE1_DEATH_ANIM_IMG, 22,26, 0.1, 0)
-	else
+	elseif typeIA == 2 then
 		animImg = newAnimation(FOE2_DEATH_ANIM_IMG, 22,26, 0.1, 0)
+	elseif typeIA == 3 then
+		animImg = newAnimation(BLOB_DEATH_ANIM_IMG, 12,16, 0.1, 0)	
 	end
 
 	animImg:setMode("once")
-	if dir == 1 then
-		table.insert(anims,{ pos={x = x-3*9, y = y - 3*13} , vit = {x=0,y=0},animation = animImg, scaleX =3, scaleY = 3,loop=false,angle = 0,display_top = true})
+
+	if typeIA == 3 then
+		if dir == 1 then
+			table.insert(anims,{ pos={x = x-3*6, y = y - 3*8} , vit = {x=0,y=0},animation = animImg, scaleX =3, scaleY = 3,loop=false,angle = 0,display_top = true})
+		else
+			table.insert(anims,{pos={ x = x+3*6, y = y-3*8}, vit = {x=0,y=0} ,animation = animImg, scaleX =-3, scaleY = 3,loop=false,angle = 0,display_top = true})
+		end
 	else
-		table.insert(anims,{pos={ x = x+3*9, y = y-3*13 }, vit = {x=0,y=0} ,animation = animImg, scaleX =-3, scaleY = 3,loop=false,angle = 0,display_top = true})
+	if dir == 1 then
+			table.insert(anims,{ pos={x = x-3*9, y = y - 3*13} , vit = {x=0,y=0},animation = animImg, scaleX =3, scaleY = 3,loop=false,angle = 0,display_top = true})
+		else
+			table.insert(anims,{pos={ x = x+3*9, y = y-3*13 }, vit = {x=0,y=0} ,animation = animImg, scaleX =-3, scaleY = 3,loop=false,angle = 0,display_top = true})
+		end
 	end
 end
 

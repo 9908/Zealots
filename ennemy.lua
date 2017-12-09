@@ -3,8 +3,12 @@ function drawEnnemies()
 	if start_new_wave == true then
 		for i,v in ipairs(ennemies) do -- draw ennemies
 
-	    	-- love.graphics.rectangle("fill",v.pos.x-v.w/2,v.pos.y-v.h/2,v.w,v.h)
-			love.graphics.draw(SHADOW_IMG,v.pos.x-v.w/2+10, v.pos.y+v.h/2, 0, 3, 3,0,0)
+	   --  love.graphics.rectangle("fill",v.pos.x-v.w/2,v.pos.y-v.h/2,v.w,v.h)
+	    	if v.IA == 3 then
+				love.graphics.draw(SHADOW_IMG,v.pos.x-v.w/2+12, v.pos.y+v.h/2-5, 0, 3, 3,0,0)
+	    	else
+				love.graphics.draw(SHADOW_IMG,v.pos.x-v.w/2+12, v.pos.y+v.h/2, 0, 3, 3,0,0)
+			end
 
 			if v.praying == true then
 				if v.direction == 1 then
@@ -99,6 +103,19 @@ function updateEnnemies(dt)
 
 				-- update a* path
 				v.path = computePathtoGoal(v.pos,player)
+			elseif v.IA == 3 then -- Blob IA
+				-- Shoot
+				if v.canShoot and distance(v.pos.x,v.pos.y,player.pos.x,player.pos.y) < 32*3 then
+					v.canShoot = false
+					ShootThePlayer(v) -- create bullet toward player
+					v.timerStart = love.timer.getTime()
+				end
+				if love.timer.getTime() - v.timerStart > bullet_reload+math.random(0,3) and v.canShoot == false then
+					v.canShoot = true
+				end
+
+				-- update a* path
+				v.path = computePathtoGoal(v.pos,player)	
 			end
 
 
@@ -106,15 +123,19 @@ function updateEnnemies(dt)
 			if v.praying == false then -- MOVING towards goal
 				local diffx = (next_local_goal.x-0.5)*16*3+love.math.random(80)-40 - v.pos.x
 				local diffy = (next_local_goal.y-0.5)*16*3+love.math.random(80)-40 - v.pos.y
+				local acc_local = ACCELERATION
+				if v.IA == 3 then
+					acc_local = 3*ACCELERATION
+				end
 				if math.abs(diffx)==diffx then
-					v.acc.x=ACCELERATION/3.5
+					v.acc.x=acc_local/3.5
 				else
-					v.acc.x=-ACCELERATION/3.5
+					v.acc.x=-acc_local/3.5
 				end
 				if math.abs(diffy)==diffy then
-					v.acc.y=ACCELERATION/3.5
+					v.acc.y=acc_local/3.5
 				else
-					v.acc.y=-ACCELERATION/3.5
+					v.acc.y=-acc_local/3.5
 				end
 
 				updateVelocity(v,dt)
@@ -220,26 +241,44 @@ function SummonEnnemies(local_x,local_y,nbr) -- Spawn new Ennemies
 		end
 
 		local random= love.math.random(2)
-		local random_IA =  love.math.random(2)
+		local random_IA =  love.math.random(3)
 		
-		local ENNEMY_1_idle
-		local ENNEMY_1_walk
-		local ENNEMY_1_pray
+		local ENNEMY_idle = nil
+		local ENNEMY_walk = nil
+		local ENNEMY_pray = nil
 
+		local width = 10
+		local height = 10
 		if random_IA == 1 then
-			ENNEMY_1_idle = newAnimation(love.graphics.newImage("assets/foe1_idle.png"), 12, 22, 0.1, 0)
-			ENNEMY_1_idle:setMode("loop")
-			ENNEMY_1_walk = newAnimation(love.graphics.newImage("assets/foe1_walk.png"), 12, 22, 0.2, 0)
-			ENNEMY_1_walk:setMode("loop")
-			ENNEMY_1_pray = newAnimation(love.graphics.newImage("assets/foe1_pray.png"), 12, 22, 0.5, 0)
-			ENNEMY_1_pray:setMode("loop")
+			ENNEMY_idle = newAnimation(love.graphics.newImage("assets/foe1_idle.png"), 12, 22, 0.1, 0)
+			ENNEMY_idle:setMode("loop")
+			ENNEMY_walk = newAnimation(love.graphics.newImage("assets/foe1_walk.png"), 12, 22, 0.2, 0)
+			ENNEMY_walk:setMode("loop")
+			ENNEMY_pray = newAnimation(love.graphics.newImage("assets/foe1_pray.png"), 12, 22, 0.5, 0)
+			ENNEMY_pray:setMode("loop")
+
+			width = 3*12
+			height = 3*20
 		elseif random_IA == 2 then
-			ENNEMY_1_idle = newAnimation(love.graphics.newImage("assets/foe2_idle.png"), 12, 22, 0.1, 0)
-			ENNEMY_1_idle:setMode("loop")
-			ENNEMY_1_walk = newAnimation(love.graphics.newImage("assets/foe2_walk.png"), 12, 22, 0.2, 0)
-			ENNEMY_1_walk:setMode("loop")
-			ENNEMY_1_pray = newAnimation(love.graphics.newImage("assets/foe1_pray.png"), 12, 22, 0.2, 0)
-			ENNEMY_1_pray:setMode("loop")
+			ENNEMY_idle = newAnimation(love.graphics.newImage("assets/foe2_idle.png"), 12, 22, 0.1, 0)
+			ENNEMY_idle:setMode("loop")
+			ENNEMY_walk = newAnimation(love.graphics.newImage("assets/foe2_walk.png"), 12, 22, 0.2, 0)
+			ENNEMY_walk:setMode("loop")
+			ENNEMY_pray = newAnimation(love.graphics.newImage("assets/foe1_pray.png"), 12, 22, 0.2, 0)
+			ENNEMY_pray:setMode("loop")
+
+			width = 3*12
+			height = 3*20
+		elseif random_IA == 3 then
+			ENNEMY_idle = newAnimation(love.graphics.newImage("assets/blob_walk.png"), 12, 12, 0.1, 0)
+			ENNEMY_idle:setMode("loop")
+			ENNEMY_walk = newAnimation(love.graphics.newImage("assets/blob_walk.png"), 12, 12, 0.2, 0)
+			ENNEMY_walk:setMode("loop")
+			ENNEMY_pray = newAnimation(love.graphics.newImage("assets/foe1_pray.png"), 12, 12, 0.2, 0)
+			ENNEMY_pray:setMode("loop")
+
+			width = 3*12
+			height = 3*12
 		end
 
 		local newEnnemy = {
@@ -248,11 +287,11 @@ function SummonEnnemies(local_x,local_y,nbr) -- Spawn new Ennemies
 			acc = {x = 0, y = 0}, -- acceleration,
 			direction = -1, -- "1=right", "-1=left"
 
-			anim_idle = ENNEMY_1_idle,
-			anim_walk = ENNEMY_1_walk,
-			anim_pray = ENNEMY_1_pray,
-			w = 3*12,
-			h =  3*20,
+			anim_idle = ENNEMY_idle,
+			anim_walk = ENNEMY_walk,
+			anim_pray = ENNEMY_pray,
+			w = width,
+			h =  height,
 			hitbox_w= 3*10,
 			hitbox_h=3*16,
 
@@ -261,6 +300,7 @@ function SummonEnnemies(local_x,local_y,nbr) -- Spawn new Ennemies
 			praying = false,
 			bullets = {},
 			canShoot = true,
+			timerStart = love.timer.getTime(),
 
 			timerStartDust = love.timer.getTime(),
 			DELAY_POP_DUST = 0.19,

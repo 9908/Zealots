@@ -70,6 +70,7 @@ function love.load()
 
 
 end
+radius = 120
 
 function love.draw()
 
@@ -86,11 +87,18 @@ function love.draw()
 
 			-- DRAW ASTAR GRID
 		if SHOW_GRID == true then
+				love.graphics.setColor(242,233,227)
 			for i,v in ipairs(handler.tiles) do
-				for j,w in ipairs(v) do
-				love.graphics.setColor(164,152,164)
-				love.graphics.line( 0,		i*16*3, I_max*16*3, i*16*3 )
-				love.graphics.line( j*16*3,	0, 		j*16*3,		J_max*16*3 )
+				local dist = math.sqrt(math.pow(radius,2)-math.pow((love.mouse.getY()+CAM_Y0-i*16*3),2))
+				if dist <= radius then
+					love.graphics.line(  love.mouse.getX() +CAM_X0 -  dist ,i*16*3, love.mouse.getX()+CAM_X0 + dist , i*16*3 )
+				end
+
+				for j,w in ipairs(v) do 
+					local 	dist = math.sqrt(math.pow(radius,2)-math.pow((love.mouse.getX()+CAM_X0-j*16*3),2))
+					if dist <= radius then
+						love.graphics.line( j*16*3,	love.mouse.getY() +CAM_Y0 -  dist, 		j*16*3,		love.mouse.getY() +CAM_Y0 +  dist)
+					end
 				end
 			end
 		end
