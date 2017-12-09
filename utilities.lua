@@ -1,35 +1,42 @@
 ﻿
-
+AUTO_SHOOT = false
 ----- Input
 function love.mousepressed(loc_x, loc_y, button)
 	if GAME_STATE == 'PLAY' then
 		if button == 1 then -- shoot
-			local startX = player.pos.x 
-			local startY = player.pos.y 
-			local mouseX = loc_x + CAM_X0
-			local mouseY = loc_y + CAM_Y0
+
+			AUTO_SHOOT = true
+
+			-- local startX = player.pos.x 
+			-- local startY = player.pos.y 
+			-- local mouseX = loc_x + CAM_X0
+			-- local mouseY = loc_y + CAM_Y0
 	 
-			local angle = math.atan2((mouseY - startY), (mouseX - startX))
+			-- local angle = math.atan2((mouseY - startY), (mouseX - startX))
 	 
-			local bulletDx = 2.5*bulletSpeed * math.cos(angle)
-			local bulletDy = 2.5*bulletSpeed * math.sin(angle)
+			-- local bulletDx = 2.5*bulletSpeed * math.cos(angle)
+			-- local bulletDy = 2.5*bulletSpeed * math.sin(angle)
 
-			local shoot_SFX = love.audio.newSource("assets/sounds/shoot.wav", "static")
+			-- local shoot_SFX = love.audio.newSource("assets/sounds/shoot.wav", "static")
 
-			pop_pickup_anim(mouseX-12,mouseY-12)
+			-- pop_pickup_anim(mouseX-12,mouseY-12)
 
-			shoot_SFX:setVolume(0.6)
-			shoot_SFX:play()
-			table.insert(player.bullets,{ pos = {x = startX, y = startY}, vit = {x = bulletDx, y = bulletDy}, w=7,h=7,anim = BULLET_ANIM})
+			-- shoot_SFX:setVolume(0.6)
+			-- shoot_SFX:play()
+			-- table.insert(player.bullets,{ pos = {x = startX, y = startY}, vit = {x = bulletDx, y = bulletDy}, w=7,h=7,anim = BULLET_ANIM})
+			playerShoot()
 		elseif button == 2 then -- place crate
 	 		SHOW_GRID = true
 		end
+
 	end
 end
 
 
 function love.mousereleased(loc_x, loc_y, button)
-	if button == 2 then 
+	if button == 1 then 
+		AUTO_SHOOT = false
+	elseif button == 2 then 
 	 	SHOW_GRID = false
 		local mouseX = loc_x + CAM_X0
 		local mouseY = loc_y + CAM_Y0

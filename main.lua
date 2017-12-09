@@ -149,6 +149,7 @@ function love.draw()
 
 			love.graphics.print("player w: "..player.w,100+offsetX,110+offsetY)
 			love.graphics.print("player h: "..player.h, 100+offsetX,120+offsetY)
+			love.graphics.print("player canShoot: "..tostring(player.weapon.canShoot), 100+offsetX,130+offsetY)
 
 			love.graphics.print("camera shake_type: "..camera.shaketype, 100+offsetX,140+offsetY)
 			love.graphics.print("camera X: "..tostring(camera.x), 100+offsetX,150+offsetY)
@@ -336,6 +337,11 @@ function restartGame()
 			direction = -1, -- "1=right", "-1=left"
 
 			bullets = {},
+			weapon= {
+				timerAutoShoot = love.timer.getTime(),
+				canShoot = false,
+				bullet_reload = 0.3
+			},
 			crates_nbr = 8,
 
 			anim_idle = PLAYER_idle,

@@ -1,4 +1,6 @@
-﻿function drawPlayer()
+﻿
+
+function drawPlayer()
 
    	--DRAW PLAYER
 
@@ -36,8 +38,39 @@ end
 	end
 end
 
+function playerShoot()
+	local startX = player.pos.x 
+	local startY = player.pos.y 
+	local mouseX = love.mouse.getX() + CAM_X0
+	local mouseY = love.mouse.getY() + CAM_Y0
+ 
+	local angle = math.atan2((mouseY - startY), (mouseX - startX))
+
+	local bulletDx = 2.5*bulletSpeed * math.cos(angle)
+	local bulletDy = 2.5*bulletSpeed * math.sin(angle)
+
+	local shoot_SFX = love.audio.newSource("assets/sounds/shoot.wav", "static")
+
+	pop_pickup_anim(mouseX-12,mouseY-12)
+
+	shoot_SFX:setVolume(0.6)
+	shoot_SFX:play()
+	table.insert(player.bullets,{ pos = {x = startX, y = startY}, vit = {x = bulletDx, y = bulletDy}, w=7,h=7,anim = BULLET_ANIM})
+end
 
 function updatePlayer(dt)
+
+	-- AUTOSHOOT
+	if AUTO_SHOOT == true then
+		if player.weapon.canShoot then
+			player.weapon.canShoot = false
+			playerShoot()
+			player.weapon.timerAutoShoot = love.timer.getTime()
+		end
+		if love.timer.getTime() - player.weapon.timerAutoShoot > player.weapon.bullet_reload and player.weapon.canShoot == false then
+			player.weapon.canShoot = true
+		end
+	end
 
 	-- MOUVEMENT
 
