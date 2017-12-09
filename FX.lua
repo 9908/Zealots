@@ -205,8 +205,19 @@ function updateFX(dt)
 		anim.animation:update(dt)
 		anim.pos.x = anim.pos.x + anim.vit.x * dt
 		anim.pos.y = anim.pos.y + anim.vit.y * dt
-		if anim.animation.img == ARROW_ANIM_IMG and start_new_wave == true then -- remove ARROWs when new wave starts
-			table.remove(anims,i)
+		if anim.animation.img == ARROW_ANIM_IMG then
+			if anim.angle == 0 then
+				anim.pos.y = anim.pos.y + math.cos(10*love.timer.getTime())
+			elseif anim.angle == math.pi then
+				anim.pos.y = anim.pos.y + math.sin(10*love.timer.getTime())
+			elseif anim.angle == -math.pi/2 then
+				anim.pos.x = anim.pos.x + math.sin(10*love.timer.getTime())
+			elseif anim.angle == math.pi/2 then
+				anim.pos.x = anim.pos.x + math.cos(10*love.timer.getTime())
+			end
+			if start_new_wave == true then -- remove ARROWs when new wave starts
+				table.remove(anims,i)
+			end
 		end
 		if anim.animation:getCurrentFrame() == anim.animation:getSize() and anim.loop == false then
 			table.remove(anims,i)

@@ -21,7 +21,7 @@ require ("middleclass")
 require ("middleclass")
 require ("middleclass")
 
-debug = false
+debug = true
 
 GAME_STATE = "START_MENU" -- START_MENU, PLAY - LOSE - WIN
 SHOW_GRID = false
@@ -169,6 +169,10 @@ function love.draw()
 			love.graphics.print("start_new_wave: "..tostring(start_new_wave), 100+offsetX,280+offsetY)
 
 			love.graphics.print("Nbr anims: "..Nbr_anims, 100+offsetX,300+offsetY)
+
+			love.graphics.print("CAM_X0: "..CAM_X0, 100+offsetX,310+offsetY)
+			love.graphics.print("CAM_Y0: "..CAM_Y0, 100+offsetX,320+offsetY)
+
 
 
 

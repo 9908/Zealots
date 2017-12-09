@@ -64,8 +64,8 @@ function updatePlayer(dt)
 		player.vit.x = 0
 		player.acc.x = 0
 	end
-	if player.pos.x+player.hitbox_w/2 > screenWidth then -- limit mvt out of screen right
-		player.pos.x = screenWidth - player.hitbox_w/2
+	if player.pos.x+player.hitbox_w/2 > screenWidth+2*CAM_X0 then -- limit mvt out of screen right
+		player.pos.x = screenWidth+2*CAM_X0 - player.hitbox_w/2 
 		player.vit.x = 0
 		player.acc.x = 0
 	end
@@ -74,8 +74,8 @@ function updatePlayer(dt)
 		player.vit.y = 0
 		player.acc.y = 0
 	end
-	if player.pos.y+player.hitbox_h/2 > screenHeight then -- limit mvt out of screen bottom
-		player.pos.y = screenHeight - player.hitbox_h/2
+	if player.pos.y+player.hitbox_h/2 > screenHeight+2*CAM_Y0 then -- limit mvt out of screen bottom
+		player.pos.y = screenHeight+2*CAM_Y0 - player.hitbox_h/2
 		player.vit.y = 0
 		player.acc.y = 0
 	end
