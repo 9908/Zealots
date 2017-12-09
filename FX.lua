@@ -57,6 +57,13 @@ function loadImg()
 	FOE1_DEATH_ANIM_IMG = love.graphics.newImage("assets/foe1_death.png")
 	FOE2_DEATH_ANIM_IMG = love.graphics.newImage("assets/foe2_death.png")
 	BLOB_DEATH_ANIM_IMG = love.graphics.newImage("assets/blob_death.png")
+
+	FOE1_IDLE_ANIM_IMG = love.graphics.newImage("assets/foe1_idle.png")
+	FOE1_WALK_ANIM_IMG = love.graphics.newImage("assets/foe1_walk.png")
+	FOE1_PRAY_ANIM_IMG = love.graphics.newImage("assets/foe1_pray.png")
+	FOE2_IDLE_ANIM_IMG = love.graphics.newImage("assets/foe2_idle.png")
+	FOE2_WALK_ANIM_IMG = love.graphics.newImage("assets/foe2_walk.png")
+	BLOB_WALK_ANIM_IMG = love.graphics.newImage("assets/blob_walk.png")
 	-- for i = 1,5 do
 	-- 	for j = 1,5 do
 
@@ -150,7 +157,7 @@ function pop_arrow_anim(x,y,angle_loc)
 
 	animImg = newAnimation(ARROW_ANIM_IMG, 36, 57, 0.2, 0)
 	animImg:setMode("loop")
-	table.insert(anims,{ pos={x = x,y = y }, vit = {x=0,y=0}, animation = animImg, scaleX =3, scaleY = 3,loop=true,angle = angle_loc,display_top = true}) 
+	table.insert(anims,{ pos={x = x,y = y }, vit = {x=0,y=0}, animation = animImg, scaleX =3, scaleY = 3,loop=true,angle = angle_loc,display_top = true})
 end
 
 function pop_pickup_anim(x,y)
@@ -187,7 +194,7 @@ function pop_foe_death_anim(x,y,dir,typeIA)
 	elseif typeIA == 2 then
 		animImg = newAnimation(FOE2_DEATH_ANIM_IMG, 22,26, 0.1, 0)
 	elseif typeIA == 3 then
-		animImg = newAnimation(BLOB_DEATH_ANIM_IMG, 12,16, 0.1, 0)	
+		animImg = newAnimation(BLOB_DEATH_ANIM_IMG, 12,16, 0.1, 0)
 	end
 
 	animImg:setMode("once")
@@ -276,7 +283,7 @@ function drawFXTop()
 	-- Draw arrows to indicate spawn location
 	if display_arrow then
 		local time_left = math.floor(TIME_START_WAVE - (love.timer.getTime() - timerStartWaves)+0.5)
-		
+
 		useCustomFont(120)
 		love.graphics.setColor(0,0,0)
 		love.graphics.printf(tostring(time_left),screenWidth/3.25+6,screenHeight/6.5+6,500,'center')

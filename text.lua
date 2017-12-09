@@ -49,18 +49,18 @@ function addBigMessage(textmsg, sizemsg)
 end
 
 function drawMessages()
-	useCustomFont(40)
+	useCustomFont(50)
 	for i, msg in ipairs(messages) do
 		--myColor = {155, 155, 70,msg.opacity}
 		love.graphics.setColor(52,58,71)
 		local msg_H = 0.1*J_max*TILE_H
-		love.graphics.rectangle("fill", 0, 0,I_max*TILE_W, (msg.opacity/msg.maxopacity*msg_H))
-		love.graphics.rectangle("fill", 0, (1-(msg.opacity/msg.maxopacity))*msg_H+0.9*J_max*TILE_H,I_max*TILE_W, (1-(-msg.opacity+msg.maxopacity)/msg.maxopacity)*msg_H)
+		love.graphics.rectangle("fill", CAM_X0, CAM_Y0,screenWidth, (msg.opacity/msg.maxopacity*msg_H)) 
+		love.graphics.rectangle("fill", CAM_X0, CAM_Y0+(1-(msg.opacity/msg.maxopacity))*msg_H+0.9*screenHeight, screenWidth, -CAM_Y0+(1-(-msg.opacity+msg.maxopacity)/msg.maxopacity)*msg_H)
 
 		myColor = {255, 255, 255,255}
 		love.graphics.setColor(myColor)
 		if msg.opacity > 0.9*msg.maxopacity then
-			love.graphics.printf(msg.text, 0, 0.92	*J_max*TILE_H, I_max*TILE_W,"center")
+			love.graphics.printf(msg.text, 0, 0.985*J_max*TILE_H, I_max*TILE_W,"center")
 		end
 	end
 end

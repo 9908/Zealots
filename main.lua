@@ -50,7 +50,7 @@ txt_size = 60 + 20*math.sin(time)
 SHRINE_POS = {x = (I_max-1)/2 , y=(J_max-1)/2 }
 
 function love.load()
-	love.graphics.setBackgroundColor(100, 100, 100)
+	love.graphics.setBackgroundColor(255,255,255)
 
 
 	-- load img
@@ -76,6 +76,9 @@ function love.draw()
 
 	if GAME_STATE == "PLAY" then
 	-- Set camera position
+
+		love.graphics.setBackgroundColor( 74,48,57 )
+
 		camera:set(0,0)
 
 		love.graphics.draw(BG_IMG,0,0,0,3,3)--BG_IMG:getWidth(),  BG_IMG:getHeight())
@@ -123,13 +126,13 @@ function love.draw()
 
 		useCustomFont(50)
 		love.graphics.setColor(0,0,0)
-		love.graphics.print("Crates: "..player.crates_nbr,30+2,80+2)
+		love.graphics.print("Crates: "..player.crates_nbr,CAM_X0+30+2,CAM_Y0+30+2)
 		if player.crates_nbr == 0 then
 			love.graphics.setColor(255,25,1)
 		else
 			love.graphics.setColor(255,255,255)
 		end
-		love.graphics.print("Crates: "..player.crates_nbr,30,80)
+		love.graphics.print("Crates: "..player.crates_nbr,CAM_X0+30,CAM_Y0+30)
 
 
 		if start_new_wave == true and start_new_wave_pressed == false and table.getn(ennemies) == 0 then
@@ -182,6 +185,9 @@ function love.draw()
 			love.graphics.print("CAM_X0: "..CAM_X0, 100+offsetX,310+offsetY)
 			love.graphics.print("CAM_Y0: "..CAM_Y0, 100+offsetX,320+offsetY)
 
+			love.graphics.print("screenWidth: "..(screenWidth-CAM_X0), 100+offsetX,330+offsetY)
+			love.graphics.print("mouseX: "..tostring(love.mouse.getX()), 100+offsetX,340+offsetY)
+
 
 
 
@@ -212,7 +218,6 @@ function love.draw()
 	elseif GAME_STATE ==  "START_MENU" then
 
 		love.graphics.setBackgroundColor( 242,233, 227 )
-		love.graphics.setBackgroundColor( 93,98,125 )
 
 		MASK_ANIM:draw(screenWidth/2,screenHeight/2-225,0, 3, 3,55,0)
 

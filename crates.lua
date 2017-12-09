@@ -37,6 +37,7 @@ end
 
 function newBox( x,y )
 
+	if x > 0 and y > 0 and x < screenWidth +2*CAM_X0 and y < screenHeight + 2*CAM_Y0 then
 	local index_i = math.floor(x/TILE_W)+1
 	local index_j = math.floor(y/TILE_H)+1
 
@@ -80,5 +81,5 @@ function newBox( x,y )
 		box_pose_SFX:setVolume(0.5)
 		box_pose_SFX:play()
 	end
-
+	end
 end

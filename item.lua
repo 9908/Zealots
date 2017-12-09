@@ -23,7 +23,35 @@ function updateItems(dt)
 	end
 end
 
-function newItem()
+function newCrateSupply()
+	-- body
+	local rdm = math.random(3)
+	local local_x = 1
+	local local_y = 1
+
+	if rdm == 1 then
+		local_x = 485
+		local_y = 770
+	elseif rdm == 2 then
+		local_x = 1420
+		local_y = 387
+	elseif rdm == 3 then
+		local_x = 345
+		local_y = 230
+	end
+
+	ITEM_ANIM = newAnimation(love.graphics.newImage("assets/item.png"), 16, 20, 0.2, 0)
+	ITEM_ANIM:setMode("loop")
+
+	table.insert(items, {
+		anim=ITEM_ANIM,
+		w=3*16,
+		h=3*20,
+		pos={x=local_x, y=local_y}}
+	)
+end
+
+function newPowerUp()
 	-- body
 	local rdm = math.random(3)
 	local local_x = 1

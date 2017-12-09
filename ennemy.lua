@@ -115,7 +115,7 @@ function updateEnnemies(dt)
 				end
 
 				-- update a* path
-				v.path = computePathtoGoal(v.pos,player)	
+				v.path = computePathtoGoal(v.pos,player)
 			end
 
 
@@ -231,7 +231,7 @@ function SummonEnnemies(local_x,local_y,nbr) -- Spawn new Ennemies
 			posx = randomX+love.math.random(10)
 			posy = 20
 		elseif pos_spawn[random_dir] == 3 then -- right edge
-			pop_arrow_anim(screenWidth - CAM_X0 - 3*57*3/2 ,SHRINE_POS.y*TILE_H  		,math.pi/2) -- right 
+			pop_arrow_anim(screenWidth - CAM_X0 - 3*57*3/2 ,SHRINE_POS.y*TILE_H  		,math.pi/2) -- right
 			posx = screenWidth-20
 			posy = randomY+love.math.random(10)
 		elseif pos_spawn[random_dir] == 4 then -- down edge
@@ -242,7 +242,7 @@ function SummonEnnemies(local_x,local_y,nbr) -- Spawn new Ennemies
 
 		local random= love.math.random(2)
 		local random_IA =  love.math.random(3)
-		
+
 		local ENNEMY_idle = nil
 		local ENNEMY_walk = nil
 		local ENNEMY_pray = nil
@@ -250,31 +250,31 @@ function SummonEnnemies(local_x,local_y,nbr) -- Spawn new Ennemies
 		local width = 10
 		local height = 10
 		if random_IA == 1 then
-			ENNEMY_idle = newAnimation(love.graphics.newImage("assets/foe1_idle.png"), 12, 22, 0.1, 0)
+			ENNEMY_idle = newAnimation(FOE1_IDLE_ANIM_IMG, 12, 22, 0.1, 0)
 			ENNEMY_idle:setMode("loop")
-			ENNEMY_walk = newAnimation(love.graphics.newImage("assets/foe1_walk.png"), 12, 22, 0.2, 0)
+			ENNEMY_walk = newAnimation(FOE1_WALK_ANIM_IMG, 12, 22, 0.2, 0)
 			ENNEMY_walk:setMode("loop")
-			ENNEMY_pray = newAnimation(love.graphics.newImage("assets/foe1_pray.png"), 12, 22, 0.5, 0)
+			ENNEMY_pray = newAnimation(FOE1_PRAY_ANIM_IMG, 12, 22, 0.5, 0)
 			ENNEMY_pray:setMode("loop")
 
 			width = 3*12
 			height = 3*20
 		elseif random_IA == 2 then
-			ENNEMY_idle = newAnimation(love.graphics.newImage("assets/foe2_idle.png"), 12, 22, 0.1, 0)
+			ENNEMY_idle = newAnimation(FOE2_IDLE_ANIM_IMG, 12, 22, 0.1, 0)
 			ENNEMY_idle:setMode("loop")
-			ENNEMY_walk = newAnimation(love.graphics.newImage("assets/foe2_walk.png"), 12, 22, 0.2, 0)
+			ENNEMY_walk = newAnimation(FOE2_WALK_ANIM_IMG, 12, 22, 0.2, 0)
 			ENNEMY_walk:setMode("loop")
-			ENNEMY_pray = newAnimation(love.graphics.newImage("assets/foe1_pray.png"), 12, 22, 0.2, 0)
+			ENNEMY_pray = newAnimation(FOE1_PRAY_ANIM_IMG, 12, 22, 0.2, 0)
 			ENNEMY_pray:setMode("loop")
 
 			width = 3*12
 			height = 3*20
 		elseif random_IA == 3 then
-			ENNEMY_idle = newAnimation(love.graphics.newImage("assets/blob_walk.png"), 12, 12, 0.1, 0)
+			ENNEMY_idle = newAnimation(BLOB_WALK_ANIM_IMG, 12, 12, 0.1, 0)
 			ENNEMY_idle:setMode("loop")
-			ENNEMY_walk = newAnimation(love.graphics.newImage("assets/blob_walk.png"), 12, 12, 0.2, 0)
+			ENNEMY_walk = newAnimation(BLOB_WALK_ANIM_IMG, 12, 12, 0.2, 0)
 			ENNEMY_walk:setMode("loop")
-			ENNEMY_pray = newAnimation(love.graphics.newImage("assets/foe1_pray.png"), 12, 12, 0.2, 0)
+			ENNEMY_pray = newAnimation(FOE1_PRAY_ANIM_IMG, 12, 12, 0.2, 0)
 			ENNEMY_pray:setMode("loop")
 
 			width = 3*12

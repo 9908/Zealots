@@ -19,7 +19,7 @@ function updateWave(dt) -- Update the wave system (left edge - 1) then rotate cl
 
 	if table.getn(ennemies) == 0 and start_new_wave == true then -- WAVE FINISHED
 		addBigMessage("Wave no."..(wave+1),40,pos_spawn)
-		newItem()
+		newCrateSupply()
 		start_new_wave = false
 		timerStartWaves = love.timer.getTime()
 		display_arrow = true
