@@ -11,7 +11,7 @@ function useDefaultFont()
 	love.graphics.setFont(love.graphics.newFont(12))
 end
 
-function updateMessages( dt ) 
+function updateMessages( dt )
 	for i, msg in ipairs(messages) do
 
 		if msg.toremove == true then
@@ -34,8 +34,8 @@ function updateMessages( dt )
 end
 
 function addBigMessage(textmsg, sizemsg)
-	table.insert(messages, 
-		{ 
+	table.insert(messages,
+		{
 			text = textmsg,
 			opacity = 0,
 			fadeawayspeed = 250,
@@ -60,7 +60,7 @@ function drawMessages()
 		myColor = {255, 255, 255,255}
 		love.graphics.setColor(myColor)
 		if msg.opacity > 0.9*msg.maxopacity then
-		love.graphics.printf(msg.text, 0, 0.92	*J_max*TILE_H, I_max*TILE_W,"center")
+			love.graphics.printf(msg.text, 0, 0.92	*J_max*TILE_H, I_max*TILE_W,"center")
 		end
 	end
 end
@@ -68,4 +68,3 @@ end
 function drawScore()
 	love.graphics.print(score, 50 , 40)
 end
-

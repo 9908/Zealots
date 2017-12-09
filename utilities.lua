@@ -4,11 +4,10 @@
 function love.mousepressed(loc_x, loc_y, button)
 	if GAME_STATE == 'PLAY' then
 		if button == 1 then -- shoot
-			pop_pickup_anim(loc_x-12,loc_y-12)
 			local startX = player.pos.x 
 			local startY = player.pos.y 
-			local mouseX = loc_x
-			local mouseY = loc_y
+			local mouseX = loc_x + CAM_X0
+			local mouseY = loc_y + CAM_Y0
 	 
 			local angle = math.atan2((mouseY - startY), (mouseX - startX))
 	 
@@ -16,14 +15,14 @@ function love.mousepressed(loc_x, loc_y, button)
 			local bulletDy = 2.5*bulletSpeed * math.sin(angle)
 
 			local shoot_SFX = love.audio.newSource("assets/sounds/shoot.wav", "static")
+
+			pop_pickup_anim(mouseX-12,mouseY-12)
+
 			shoot_SFX:setVolume(0.6)
 			shoot_SFX:play()
 			table.insert(player.bullets,{ pos = {x = startX, y = startY}, vit = {x = bulletDx, y = bulletDy}, w=7,h=7,anim = BULLET_ANIM})
 		elseif button == 2 then -- place crate
-
-	 
 	 		SHOW_GRID = true
-
 		end
 	end
 end
@@ -32,8 +31,8 @@ end
 function love.mousereleased(loc_x, loc_y, button)
 	if button == 2 then 
 	 	SHOW_GRID = false
-	 	local mouseX = loc_x
-		local mouseY = loc_y
+		local mouseX = loc_x + CAM_X0
+		local mouseY = loc_y + CAM_Y0
 		if player.crates_nbr > 0 then
 			newBox(mouseX,mouseY)
 		end				
@@ -55,8 +54,6 @@ function love.keypressed (key)
    if key == 'space' then
    		if (GAME_STATE == "START_MENU" or GAME_STATE == "LOSE") then
    			restartGame()
-   		elseif GAME_STATE == "PLAY" then
-   			start_new_wave_pressed = true
    		end
 	end
 

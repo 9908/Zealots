@@ -21,6 +21,8 @@ require ("middleclass")
 require ("middleclass")
 require ("middleclass")
 
+debug = false
+
 GAME_STATE = "START_MENU" -- START_MENU, PLAY - LOSE - WIN
 SHOW_GRID = false
 
@@ -41,18 +43,22 @@ bullet_reload = 4
 
 score = 0
 wave = 0 							-- Current wave numbering
-		
-time = 0		
+
+time = 0
 txt_size = 60 + 20*math.sin(time)
 
 SHRINE_POS = {x = (I_max-1)/2 , y=(J_max-1)/2 }
+
 function love.load()
 	love.graphics.setBackgroundColor(100, 100, 100)
- 
+
 
 	-- load img
 	loadImg()
 	loadSound()
+
+	cursor = love.mouse.newCursor( CROSSHAIR_IMG, CROSSHAIR_IMG:getWidth()/2,CROSSHAIR_IMG:getHeight()/2 )
+	love.mouse.setCursor( cursor )
 
 	if GAME_STATE == "PLAY" then
 		-- Set initial camera location
@@ -62,11 +68,12 @@ function love.load()
 		test_astart()
 	end
 
+
 end
 
-function love.draw() 
+function love.draw()
 
-	if GAME_STATE == "PLAY" then 
+	if GAME_STATE == "PLAY" then
 	-- Set camera position
 		camera:set(0,0)
 
@@ -79,17 +86,17 @@ function love.draw()
 
 			-- DRAW ASTAR GRID
 		if SHOW_GRID == true then
-			for i,v in ipairs(handler.tiles) do 
+			for i,v in ipairs(handler.tiles) do
 				for j,w in ipairs(v) do
 				love.graphics.setColor(164,152,164)
 				love.graphics.line( 0,		i*16*3, I_max*16*3, i*16*3 )
 				love.graphics.line( j*16*3,	0, 		j*16*3,		J_max*16*3 )
 				end
-			end	
+			end
 		end
 
 		love.graphics.setColor(255,255,255)
-		
+
 	 	drawShrineBot()
 		drawFXBot()
 		drawCrates()
@@ -97,8 +104,8 @@ function love.draw()
 		drawEnnemies()
 	 	drawPlayer()
 	 	drawShrineTop()
-		drawFXTop()
 		drawMessages()
+		drawFXTop()
 
 		-- love.graphics.setColor(0,0,0)
 		-- love.graphics.print("Score: "..score,30+2,110+2)
@@ -106,6 +113,7 @@ function love.draw()
 		-- love.graphics.print("Score: "..score,30,110)
 
 
+		useCustomFont(50)
 		love.graphics.setColor(0,0,0)
 		love.graphics.print("Crates: "..player.crates_nbr,30+2,80+2)
 		if player.crates_nbr == 0 then
@@ -124,32 +132,48 @@ function love.draw()
 			love.graphics.setColor(244,248,255)
 			love.graphics.printf("Press space to continue",screenWidth/3.25,screenHeight/1.8,500,'center')
 		end
-		
+
 		useDefaultFont()
 
-		-- local offsetX = 10 --
-		-- local offsetY = 100
-		-- 	love.graphics.print("v_x: "..player.vit.x,100+offsetX,30+offsetY)
-		-- 	love.graphics.print("v_y: "..player.vit.y, 100+offsetX,40+offsetY)
+		if debug then
+			local offsetX = 10 --
+			local offsetY = 100
+			love.graphics.print("v_x: "..player.vit.x,100+offsetX,30+offsetY)
+			love.graphics.print("v_y: "..player.vit.y, 100+offsetX,40+offsetY)
 
-		-- 	love.graphics.print("a_x: "..player.acc.x,100+offsetX,60+offsetY)
-		-- 	love.graphics.print("a_y: "..player.acc.y, 100+offsetX,70+offsetY)
+			love.graphics.print("a_x: "..player.acc.x,100+offsetX,60+offsetY)
+			love.graphics.print("a_y: "..player.acc.y, 100+offsetX,70+offsetY)
 
-		-- 	love.graphics.print("pos_x: "..player.pos.x,100+offsetX,90+offsetY)
-		-- 	love.graphics.print("pos_y: "..player.pos.y, 100+offsetX,100+offsetY)
+			love.graphics.print("pos_x: "..player.pos.x,100+offsetX,90+offsetY)
+			love.graphics.print("pos_y: "..player.pos.y, 100+offsetX,100+offsetY)
 
-		-- 	love.graphics.print("player w: "..player.w,100+offsetX,110+offsetY)
-		-- 	love.graphics.print("player h: "..player.h, 100+offsetX,120+offsetY)
+			love.graphics.print("player w: "..player.w,100+offsetX,110+offsetY)
+			love.graphics.print("player h: "..player.h, 100+offsetX,120+offsetY)
 
-		-- 	love.graphics.print("camera shake_type: "..camera.shaketype, 100+offsetX,140+offsetY)
-		-- 	love.graphics.print("camera X: "..tostring(camera.x), 100+offsetX,150+offsetY)
-		-- 	love.graphics.print("camera Y: "..tostring(camera.y), 100+offsetX,160+offsetY)
-		-- 	love.graphics.print("camera shake Val: "..tostring(camera.shakeVal), 100+offsetX,170+offsetY)
+			love.graphics.print("camera shake_type: "..camera.shaketype, 100+offsetX,140+offsetY)
+			love.graphics.print("camera X: "..tostring(camera.x), 100+offsetX,150+offsetY)
+			love.graphics.print("camera Y: "..tostring(camera.y), 100+offsetX,160+offsetY)
+			love.graphics.print("camera shake Val: "..tostring(camera.shakeVal), 100+offsetX,170+offsetY)
+
+			love.graphics.print("spawn1: "..tostring(pos_spawn[1]), 100+offsetX,190+offsetY)
+			love.graphics.print("spawn2: "..tostring(pos_spawn[2]), 100+offsetX,200+offsetY)
+			love.graphics.print("spawn3: "..tostring(pos_spawn[3]), 100+offsetX,210+offsetY)
+			love.graphics.print("spawn4: "..tostring(pos_spawn[4]), 100+offsetX,220+offsetY)
+
+
+			love.graphics.print("spawn1_eff: "..tostring(pos_spawn_eff[1]), 100+offsetX,230+offsetY)
+			love.graphics.print("spawn2_eff: "..tostring(pos_spawn_eff[2]), 100+offsetX,240+offsetY)
+			love.graphics.print("spawn3_eff: "..tostring(pos_spawn_eff[3]), 100+offsetX,250+offsetY)
+			love.graphics.print("spawn_eff4: "..tostring(pos_spawn_eff[4]), 100+offsetX,260+offsetY)
+
+			love.graphics.print("start_new_wave: "..tostring(start_new_wave), 100+offsetX,280+offsetY)
+
+			love.graphics.print("Nbr anims: "..Nbr_anims, 100+offsetX,300+offsetY)
 
 
 
 
-		-- for i,v in ipairs(handler.tiles) do 
+		-- for i,v in ipairs(handler.tiles) do
 			-- 	for j,w in ipairs(v) do
 			-- 		if w == 0 then
 			-- 			love.graphics.setColor(255,255,255)
@@ -159,17 +183,18 @@ function love.draw()
 			-- 			love.graphics.circle("fill",(j-0.5)*16*3,(i-0.5)*16*3,5)
 			-- 		end
 			-- 	end
-			-- end	
+			-- end
 		-- for i,v in ipairs(path_test) do
 		-- 	love.graphics.setColor(255,0,0)
 		-- 	love.graphics.circle("fill",(v.location.x-0.5)*16*3,(v.location.y-0.5)*16*3,5)
-		-- end 
+		-- end
 		-- love.graphics.setColor(0,0,0)
 
+		end
 
 	-- Pops the current coordinate transformation from the transformation stack. ( 0,0 is again the top-left coordinate)
 	camera:unset()
-	
+
 
 	elseif GAME_STATE ==  "START_MENU" then
 
@@ -226,7 +251,7 @@ function love.draw()
 		love.graphics.setColor(244,248,255 	)
 		love.graphics.printf("You Lost Miserably",offsetX+screenWidth/2+4,offsetY+screenHeight/2,1500,'center')
 		love.graphics.printf("Press space to restart",offsetX+screenWidth/2,offsetY+screenHeight/2+50,1500,'center')
-		
+
 
 		local offsetX = -1050
 		local offsetY = 200
@@ -240,47 +265,49 @@ function love.draw()
 		love.graphics.setColor(0,0,0)
 
 	elseif GAME_STATE ==  "TEST" then
-		
-		
+
+
 	end
 
+		love.graphics.setColor(255,255,255)
+		love.graphics.print("FPS: "..tostring(love.timer.getFPS())	,30+2,20+2)
 	love.graphics.setColor(255,255,255)
 end
 
 function test_astart()
 
 handler:updatemap(crates)
---astar:initialize(handler) 
+--astar:initialize(handler)
 local astar = AStar(handler)
 
 end
 
 
 function love.update(dt)
-	if dt < 1/60 then
-		love.timer.sleep(1/60 - dt)
-	end
-
+	-- if dt < 1/60 then
+	-- 	love.timer.sleep(1/60 - dt)
+	-- end
+	
 	time = time+5*dt
 	if time > 2*math.pi then
 		time = 0
 	end
 
 	txt_size = 40 + 10*math.sin(time)
-	if GAME_STATE == "PLAY" then 
+	if GAME_STATE == "PLAY" then
 		updateShrine(dt)
 		updatePlayer(dt)
 		updateCrates(dt)
 		updateItems(dt)
 		updateEnnemies(dt)
 		updateWave(dt)
-		updateMessages(dt) 
-		updateFX(dt) 
+		updateMessages(dt)
+		updateFX(dt)
 
 		camera:update(dt)
 		--camera:setPosition( player.pos.x , player.pos.y )
 	elseif GAME_STATE == "START_MENU" or GAME_STATE == "LOSE" then
-		MASK_ANIM:update(dt) 
+		MASK_ANIM:update(dt)
 	end
 end
 function restartGame()
@@ -297,7 +324,7 @@ function restartGame()
 	score = 0
 
 	-- Player
-	player = {	
+	player = {
 			pos = {x = I_max*TILE_W/2-200, y = J_max*TILE_H/2}, -- position
 			vit = {x = 0, y = 0}, -- vitesse,
 			acc = {x = 0, y = 0}, -- acceleration,
@@ -329,7 +356,7 @@ function restartGame()
 	items = {}
 
 	-- Crates
-	crates = {} 
+	crates = {}
 
 	-- Anims
 	anims = {}
