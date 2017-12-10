@@ -162,7 +162,7 @@ function updateEnnemies(dt)
 						v.canPop = false
 						v.timerPopping = love.timer.getTime()
 						v.popped = v.popped + 1
-						SummonEnnemies(v.pos.x,v.pos.y,1,{ID=3,posx=v.pos.x, posy=v.pos.y}) 
+						SummonEnnemies(1,{ID=3,posx=v.pos.x, posy=v.pos.y},true) 
 					end
 					if love.timer.getTime() - v.timerPopping > v.DELAY_POPPING and v.canPop == false then
 						v.canPop = true
@@ -275,51 +275,40 @@ function ShootThePlayer( v )
 	table.insert(v.bullets,{ pos = {x = startX, y = startY}, vit = {x = bulletDx, y = bulletDy}, w=5,h=5,anim = BULLET_FOE_ANIM})
 end
 
-function SummonEnnemies(local_x,local_y,nbr,type_en) -- Spawn new Ennemies
-	pos_spawn_eff = {}
+function SummonEnnemies(nbr,type_en,ennemy_spawn) -- Spawn new Ennemies
+	
 	for i = 1,nbr do
 		local random_dir = love.math.random(4)
-		local randomX = love.math.random(screenWidth-20)
-		local randomY = love.math.random(screenHeight-20)
+		local randomX = -20+CAM_X0+love.math.random(screenWidth-20-2*CAM_X0)
+		local randomY = -20+CAM_Y0+love.math.random(screenHeight-20-2*CAM_Y0)
 		local posx = 1
 		local posy = 1
 
-		local duplicate = false -- AVOIDS DUPLICATE SPAWN DIRECTION
-		for i,v in ipairs(pos_spawn_eff) do
-			if pos_spawn[random_dir] == pos_spawn_eff[i] then
-				duplicate = true
-			end
-		end
-		if not(duplicate) then
-			table.insert(pos_spawn_eff,pos_spawn[random_dir])
-
-		end
-
-
 		if pos_spawn[random_dir] == 1 then -- left edge
-			pop_arrow_anim(CAM_X0  		+ 57*3/2		,SHRINE_POS.y*TILE_H + 57*3/2,-math.pi/2) -- left
-			posx = 20
+			posx = 20 + CAM_X0
 			posy = randomY+love.math.random(10)
 		elseif pos_spawn[random_dir] == 2 then -- up edge
-			pop_arrow_anim(SHRINE_POS.x*TILE_W 	- 36*3/2		,0 				,0) -- up
+			--pop_arrow_anim(SHRINE_POS.x*TILE_W 	- 36*3/2		,0 				,0) -- up
 			posx = randomX+love.math.random(10)
-			posy = 20
+			posy = 20 + CAM_Y0
 		elseif pos_spawn[random_dir] == 3 then -- right edge
-			pop_arrow_anim(screenWidth - CAM_X0 - 3*57*3/2 ,SHRINE_POS.y*TILE_H  		,math.pi/2) -- right
-			posx = screenWidth-20
+			--pop_arrow_anim(screenWidth - CAM_X0 - 3*57*3/2 ,SHRINE_POS.y*TILE_H  		,math.pi/2) -- right
+			posx = screenWidth-20 + CAM_X0
 			posy = randomY+love.math.random(10)
 		elseif pos_spawn[random_dir] == 4 then -- down edge
-			pop_arrow_anim(SHRINE_POS.x*TILE_W	+ 36*3/2		,screenHeight-CAM_Y0 - 57*3	,math.pi) -- down
+			--pop_arrow_anim(SHRINE_POS.x*TILE_W	+ 36*3/2		,screenHeight-CAM_Y0 - 57*3	,math.pi) -- down
 			posx = randomX+love.math.random(10)
-			posy = screenHeight-20
+			posy = screenHeight-20 + CAM_Y0
 		end
 
 		local random= love.math.random(2)
 		local random_IA =  love.math.random(5)
 		if not(type_en == nil) then 
 			random_IA = type_en.ID
-			posx = type_en.posx -love.math.random(32*2) + love.math.random(64*2)
-			posy = type_en.posy -love.math.random(32*2) + love.math.random(64*2)
+			if ennemy_spawn == true then
+				posx = type_en.posx -love.math.random(32*2) + love.math.random(64*2)
+				posy = type_en.posy -love.math.random(32*2) + love.math.random(64*2)
+			end
 		end
 
 		local ENNEMY_idle = nil

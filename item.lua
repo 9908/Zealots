@@ -9,20 +9,27 @@ end
 
 function updateItems(dt)
 	for i,v in ipairs(items) do  -- pick up item
-    	if distance(v.pos.x,v.pos.y,player.pos.x,player.pos.y) < 35 then
+    	if distance(v.pos.x,v.pos.y,player.pos.x,player.pos.y) < 70 then
     		if v.item_type == 1 then -- Pick up crate
     			player.crates_nbr = player.crates_nbr + 8
+				addCrateMessage("+8")
     		else
+				--useCustomFont(50)
     			if v.item_type == 2 then -- LASER frequence
     				player.weapon.bullet_reload = player.weapon.bullet_reload - 0.025
+					addAttackMessage("Reload faster!")
     			elseif v.item_type == 3 then -- MINIGUN frequence
     				player.weapon.bullet_reload = player.weapon.bullet_reload - 0.025
+					addAttackMessage("Reload faster!")
     			elseif v.item_type == 4 then -- ROCKET zone impact
     				player.weapon.nbr_bullet = player.weapon.nbr_bullet+1
+					addAttackMessage("Spread shoot!")
     			elseif v.item_type == 5 then -- SHOTGUN nombre de balle tire en un angle
     				player.weapon.nbr_bullet = player.weapon.nbr_bullet+1
+					addAttackMessage("Spread shoot!")
     			elseif v.item_type == 6 then -- SHIELD
-    				player.stack = player.stack+1	
+    				player.stack = player.stack+1
+					addShieldMessage("+1")
     			end
     		end
     		pop_pickup_anim(v.pos.x-15,v.pos.y-15)
@@ -61,7 +68,7 @@ function getRandomLocation()
 	local randomX = -CAM_X0 + math.random(screenWidth+2*CAM_X0)
 	local randomY = -CAM_Y0 + math.random(screenHeight+2*CAM_Y0)
 	local index_i = math.floor(randomX/TILE_W)+1
-	local index_j = math.floor(randomY/TILE_W)+1
+	local index_j = math.floor(randomY/TILE_H)+1
 
 	location = {x=randomX,y=randomY}
 	while checkOccupiedSpot(index_i, index_j)  do
@@ -69,8 +76,20 @@ function getRandomLocation()
 
 		randomX = -CAM_X0 + math.random(screenWidth+2*CAM_X0)
 		randomY = -CAM_Y0 + math.random(screenHeight+2*CAM_Y0)
+
+		if randomX >= screenWidth then -- trop à droite
+			randomX = screenWidth+CAM_X0
+		elseif randomX < CAM_X0 then -- trop à gauche
+			randomX = CAM_X0
+		end
+		if randomY >= screenHeight then -- trop bas
+			randomY = screenHeight+CAM_Y0
+		elseif randomY < CAM_Y0 then
+			randomY = CAM_Y0
+		end
+
 		index_i = math.floor(randomX/TILE_W)+1
-		index_j = math.floor(randomY/TILE_W)+1
+		index_j = math.floor(randomY/TILE_H)+1
 	end
 
 	return location
@@ -106,7 +125,7 @@ function newPowerUp()
 	elseif rdm == 5 then -- SHIEDL
 		ITEM_ANIM = newAnimation(POWERUP5_ANIM_IMG, 16, 24, 0.2, 0)
 		ITEM_ANIM:setMode("loop")
-		item_type = 6	
+		item_type = 6
 	end
 
 

@@ -20,7 +20,7 @@ end
 
 function updateCrates(dt)
 	 for i,v in ipairs(crates) do  -- Draw ceates
-    	if v.health < 0 then
+    	if v.health <= 0 then
     		local index_i = v.i
     		local index_j = v.j
     		table.remove(crates,i)

@@ -24,7 +24,7 @@ require ("middleclass")
 require ("middleclass")
 
 
-debug = true
+debug = false
 
 GAME_STATE = "START_MENU" -- START_MENU, PLAY - LOSE - WIN
 SHOW_GRID = false
@@ -236,6 +236,8 @@ function love.draw()
 
 
 			love.graphics.print("player.stack: "..tostring(player.stack), 100+offsetX,440+offsetY)
+			love.graphics.print("wave: "..tostring(wave), 100+offsetX,480+offsetY)
+			love.graphics.print("WEN: "..tostring(WEN[1][2].ID), 100+offsetX,490+offsetY)
 
 
 
@@ -515,6 +517,14 @@ function restartGame()
 
 	-- Anims
 	anims = {}
+
+	WAVE = {wave_going_on = false,
+			timerPopEnnemy = love.timer.getTime(),
+			timerPopMax = 2,
+			ennemy_popped = 0,
+			current_batch = {},
+			current_batch_ID_in_table = 1
+	}
 
 	shrine = {
 			pos = {x = SHRINE_POS.x*TILE_W, y = SHRINE_POS.y*TILE_W}, -- position
