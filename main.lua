@@ -70,7 +70,7 @@ torches = {
 
 function love.load()
 	love.graphics.setBackgroundColor(255,255,255)
-
+	--resetLeaderboard()
 	-- load leaderboard
 	loadLeaderboard()
 
@@ -140,7 +140,8 @@ function love.draw()
 		drawMessages()
 		drawFXTop()
 
-		love.graphics.draw(UI_IMG,CAM_X0+5,CAM_Y0+12,0,3,3)--BG_IMG:getWidth(),  BG_IMG:getHeight())
+		local offsetX = screenWidth+CAM_X0*2.3
+		love.graphics.draw(UI_IMG,CAM_X0+5+offsetX,CAM_Y0+12,0,3,3)--BG_IMG:getWidth(),  BG_IMG:getHeight())
 		--love.graphics.setColor(0,0,0)
 		--love.graphics.print("Score: "..score,30+2,110+2)
 		--love.graphics.setColor(255,255,255)
@@ -148,14 +149,22 @@ function love.draw()
 
 
 		useCustomFont(50)
+
 		love.graphics.setColor(0,0,0)
-		love.graphics.print("= "..player.crates_nbr,CAM_X0+120+2,CAM_Y0+15+2)
+		love.graphics.print("= "..player.stack+1,CAM_X0+120+2+offsetX,CAM_Y0+15+2)
+		love.graphics.print("= "..player.crates_nbr,CAM_X0+120+2+offsetX,CAM_Y0+80+2)
+		if player.stack == 0 then
+			love.graphics.setColor(255,25,1)
+		else
+			love.graphics.setColor(255,255,255)
+		end
+		love.graphics.print("= "..player.stack+1,CAM_X0+120+offsetX,CAM_Y0+15)
 		if player.crates_nbr == 0 then
 			love.graphics.setColor(255,25,1)
 		else
 			love.graphics.setColor(255,255,255)
 		end
-		love.graphics.print("= "..player.crates_nbr,CAM_X0+120,CAM_Y0+15)
+		love.graphics.print("= "..player.crates_nbr,CAM_X0+120+offsetX,CAM_Y0+80)
 
 
 		if start_new_wave == true and start_new_wave_pressed == false and table.getn(ennemies) == 0 then
@@ -217,9 +226,9 @@ function love.draw()
 			love.graphics.print("directory: "..tostring(love.filesystem.getSaveDirectory()), 100+offsetX,380+offsetY)
 
 
-			--love.graphics.print("leaderboard: "..tostring(leaderboard[#leaderboard].score), 100+offsetX,380+offsetY)
+			love.graphics.print("score: "..score, 100+offsetX,460+offsetY)
 			--if not(#leaderboard == 0) then
-			love.graphics.print("leaderboard: "..tostring(leaderboard[#leaderboard].score), 100+offsetX,400+offsetY)
+			--love.graphics.print("leaderboard: "..tostring(leaderboard[#leaderboard].score), 100+offsetX,400+offsetY)
 			--end
 
 

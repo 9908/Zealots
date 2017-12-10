@@ -1,11 +1,12 @@
 local savename = "/leaderboard_save.lua"
 
 function saveLeaderboard()
+    -- write leaderboard to filesave
     love.filesystem.write( savename, table.show(leaderboard, "leaderboard"))
 end
 
 function loadLeaderboard()
-
+    -- load leaderboard from filesave
     if love.filesystem.exists( savename ) then
         chunk = love.filesystem.load( savename )
         chunk() -- runs the code
@@ -24,7 +25,14 @@ function loadLeaderboard()
     end
 end
 
+function resetLeaderboard()
+    -- clear the filesave of leaderboard
+    leaderboard = {}
+    saveLeaderboard()
+end
+
 function saveScore()
+    -- save score in leaderboard
     max = maxLeaderboard()
     if score > max then
         score_info = {
@@ -41,19 +49,25 @@ function saveScore()
 end
 
 function maxLeaderboard()
+    -- return the max value inside leatherboard
     local a = {}
     if not(leaderboard == {}) then
         for i, v in ipairs(leaderboard) do
             table.insert(a, v.score)
         end
         table.sort(a)
-        return a[#a]
+        if #a == 0 then
+            return 0
+        else
+            return a[#a]
+        end
     else
         return 0
     end
 end
 
 function sortLeaderboard()
+    -- not used
     local a = {}
     local aidx = {}
     for i, v in ipairs(leaderboard) do
