@@ -24,7 +24,7 @@ require ("middleclass")
 require ("middleclass")
 
 
-debug = false
+debug =  false
 
 GAME_STATE = "START_MENU" -- START_MENU, PLAY - LOSE - WIN
 SHOW_GRID = false

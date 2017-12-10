@@ -10,21 +10,21 @@ WEN = { -- ID = 0 to end wave
 	{ -- WAVE 1
 		{ID = 1, nbr = 5, freq = 1.5}, 
 		{ID = 2, nbr = 5, freq = 1.5}, 
-		{ID = 0, nbr = 1, freq = 1}
+		{ID = 0, nbr = 1, freq = 1} -- MANDATORY END OF BATCH WITH ID = 0
 	},
 
 	{ -- WAVE 2
 		{ID = 3, nbr = 5, freq = 1.5}, 
 		{ID = 3, nbr = 5, freq = 1} , 
 		{ID = 3, nbr = 5, freq = 0.5} , 
-		{ID = 0, nbr = 1, freq = 1}
+		{ID = 0, nbr = 1, freq = 1}-- MANDATORY END OF BATCH WITH ID = 0
 	},
 
 	{ -- WAVE 3
 		{ID = 1, nbr = 5, freq = 1}, 
 		{ID = 3, nbr = 20, freq = 0.3} , 
 		{ID = 4, nbr = 3, freq = 1} , 
-		{ID = 0, nbr = 1, freq = 1}
+		{ID = 0, nbr = 1, freq = 1}-- MANDATORY END OF BATCH WITH ID = 0
 	},
 
 	{-- WAVE 4
@@ -33,7 +33,7 @@ WEN = { -- ID = 0 to end wave
 		{ID = 1, nbr = 10, freq = 0.5}, 
 		{ID = 5, nbr = 1, freq = 1} , 
 		{ID = 1, nbr = 10, freq = 0.5},
-		{ID = 0, nbr = 1, freq = 1}
+		{ID = 0, nbr = 1, freq = 1}-- MANDATORY END OF BATCH WITH ID = 0
 	},
 
 	{ -- WAVE 5
@@ -42,14 +42,15 @@ WEN = { -- ID = 0 to end wave
 		{ID = 1, nbr = 10, freq = 0.3},
 		{ID = 3, nbr = 10, freq = 0.2} ,
 		{ID = 1, nbr = 3, freq = 0.2},
-		{ID = 0, nbr = 1, freq = 1}
+		{ID = 0, nbr = 1, freq = 1}-- MANDATORY END OF BATCH WITH ID = 0
 	},
 
 	{ -- WAVE 6
 		{ID = 1, nbr = 10, freq = 0.1},
 		{ID = 5, nbr = 5, freq = 1} , 
 		{ID = 2, nbr = 10, freq = 1.4} , 
-	 	{ID = 4, nbr = 5, freq = 1}
+	 	{ID = 4, nbr = 5, freq = 1},
+		{ID = 0, nbr = 1, freq = 1}-- MANDATORY END OF BATCH WITH ID = 0
 	},
 	
 	{ -- WAVE 7 LAST WAVE
@@ -62,7 +63,7 @@ WEN = { -- ID = 0 to end wave
 		{ID = 1, nbr = 10, freq = 0.1},
 		{ID = 3, nbr = 20, freq = 0.1},
 		{ID = 4, nbr = 10, freq = 0.5},
-		{ID = 0, nbr = 1, freq = 1}
+		{ID = 0, nbr = 1, freq = 1}-- MANDATORY END OF BATCH WITH ID = 0
 	}
 }
 
@@ -124,7 +125,10 @@ function StartPopEnnemies(ID) -- Start a new wave of multiple batches
 	WAVE.wave_going_on = true
 	WAVE.timerPopEnnemy = love.timer.getTime()
 	WAVE.current_batch_ID_in_table = 1	
-	local wavv = WEN[wave+1]
+	local wavv = WEN[#WEN]
+	if wave < #WEN then
+		wavv = WEN[wave+1]
+	end
 	WAVE.current_batch = wavv[1]
 	WAVE.timerPopMax = WAVE.current_batch.freq
 	WAVE.ennemy_popped = 0
@@ -138,24 +142,30 @@ function update_current_popping(dt)
 
 			WAVE.timerPopEnnemy = love.timer.getTime()
 			
-			if wave >= #WEN then
+			if wave > #WEN then
 				if WAVE.ennemy_popped <= (WAVE.current_batch.nbr + WAVE.current_batch.nbr*(wave-#WEN)/4) then
 					SummonEnnemies(1,WAVE.current_batch,false)
 					WAVE.ennemy_popped = WAVE.ennemy_popped + 1
-				end
-			elseif WAVE.ennemy_popped <= WAVE.current_batch.nbr then
-				SummonEnnemies(1,WAVE.current_batch,false)
-				WAVE.ennemy_popped = WAVE.ennemy_popped + 1
-			else
-				WAVE.current_batch_ID_in_table = WAVE.current_batch_ID_in_table + 1
-				local id = WAVE.current_batch_ID_in_table
-				if wave == #WEN then
-					WAVE.current_batch = WEN[#WEN][id]
 				else
-					WAVE.current_batch = WEN[wave][id]
+					WAVE.current_batch_ID_in_table = WAVE.current_batch_ID_in_table + 1
+					local id = WAVE.current_batch_ID_in_table
+					WAVE.current_batch = WEN[#WEN][id]
+					
+					WAVE.timerPopMax = WAVE.current_batch.freq
+					WAVE.ennemy_popped = 0	
 				end
-				WAVE.timerPopMax = WAVE.current_batch.freq
-				WAVE.ennemy_popped = 0
+			else
+				if WAVE.ennemy_popped <= WAVE.current_batch.nbr then
+					SummonEnnemies(1,WAVE.current_batch,false)
+					WAVE.ennemy_popped = WAVE.ennemy_popped + 1
+				else
+					WAVE.current_batch_ID_in_table = WAVE.current_batch_ID_in_table + 1
+					local id = WAVE.current_batch_ID_in_table
+					WAVE.current_batch = WEN[wave][id]
+					
+					WAVE.timerPopMax = WAVE.current_batch.freq
+					WAVE.ennemy_popped = 0
+				end
 			end
 		end
 	end
