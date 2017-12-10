@@ -72,6 +72,7 @@ function loadImg()
 
 	UI_IMG = love.graphics.newImage("assets/UI.png")
 	TORCH_IMG = love.graphics.newImage("assets/torche.png")
+	TORCH_SHADOW_IMG = love.graphics.newImage("assets/torche_shadow.png")
 	TORCH_ANIM_IMG = love.graphics.newImage("assets/torche_anim.png")
 
 	SHRINE_COMPLETE_IMG = {
@@ -388,6 +389,7 @@ function  drawTorches( )
 		local posx = shrine.pos.x + radius*math.cos(angle)
 		local posy = shrine.pos.y + radius*math.sin(angle)
 		love.graphics.draw(TORCH_IMG,posx,posy,0,3,3)
+		love.graphics.draw(TORCH_SHADOW_IMG,posx+5,posy+78,0,3,3)
 
 		if nbr == i and  token > 0 then
 			token = token - 1

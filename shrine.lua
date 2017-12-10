@@ -16,6 +16,7 @@ function drawShrineBot()
 
 	-- Shrine
 	love.graphics.draw(SHRINE_SHADOW_IMG,shrine.pos.x-3*(92/2), shrine.pos.y-3*(112/2), 0, 3, 3,0,0)
+	
 	if shrine.being_prayed == false then
 		love.graphics.draw(SHRINE_BOT_IMG, shrine.pos.x-shrine.w/2, shrine.pos.y-shrine.h/2,0, 3, 3,0,0)
 	else
