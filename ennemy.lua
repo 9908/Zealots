@@ -7,7 +7,7 @@ function drawEnnemies()
 	    	if v.IA == 3 then
 				love.graphics.draw(SHADOW_IMG,v.pos.x-v.w/2+12, v.pos.y+v.h/2-5, 0, 3, 3,0,0)
 			elseif v.IA == 4 or v.IA == 5 then
-				--love.graphics.draw(SHADOW_IMG,v.pos.x-v.w/2+12, v.pos.y+v.h/2-5, 0, 3, 3,0,0)	
+				love.graphics.draw(SHADOW_IMG,v.pos.x-v.w/2+15, v.pos.y+v.h/2-12, 0, 6, 6,0,0)	
 	    	else
 				love.graphics.draw(SHADOW_IMG,v.pos.x-v.w/2+12, v.pos.y+v.h/2, 0, 3, 3,0,0)
 			end
@@ -230,16 +230,20 @@ function updateEnnemies(dt)
 					table.remove(v.bullets,ii)
 				end
 				if Point_Rectangle_CollisionCheck(vv.pos.x,vv.pos.y,player.pos.x,player.pos.y,player.w,player.h) and not(player.dead) then
-					player.dead = true
-
-					local SFX = love.audio.newSource("assets/sounds/game_over.wav", "static")
-					--SFX:setVolume(0.6)
-					SFX:play()
-					pop_player_death_anim(player.pos.x,player.pos.y,player.dir)
-					timerGameOver = love.timer.getTime()
-					LOSE = true
-					FX_whiteflicker() 
-					--GAME_STATE = "LOSE"
+					if player.stack == 0 then
+						player.dead = true
+						local SFX = love.audio.newSource("assets/sounds/game_over.wav", "static")
+						--SFX:setVolume(0.6)
+						SFX:play()
+						pop_player_death_anim(player.pos.x,player.pos.y,player.dir)
+						timerGameOver = love.timer.getTime()
+						LOSE = true
+						FX_whiteflicker() 
+						--GAME_STATE = "LOSE"
+					else
+						player.stack = player.stack - 1
+					end
+					table.remove(v.bullets,ii)
 
 				end
 				if vv.pos.x < -50 or vv.pos.x > screenWidth+50 or vv.pos.y < -50 or vv.pos.y > screenHeight+ 50 then -- remove out of screen bullets
@@ -311,7 +315,7 @@ function SummonEnnemies(local_x,local_y,nbr,type_en) -- Spawn new Ennemies
 		end
 
 		local random= love.math.random(2)
-		local random_IA =  1--love.math.random(5)
+		local random_IA =  love.math.random(5)
 		if not(type_en == nil) then 
 			random_IA = type_en.ID
 			posx = type_en.posx -love.math.random(32*2) + love.math.random(64*2)

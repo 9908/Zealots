@@ -226,6 +226,9 @@ function love.draw()
 			love.graphics.print("LOSE: "..tostring(LOSE), 100+offsetX,420+offsetY)
 
 
+			love.graphics.print("player.stack: "..tostring(player.stack), 100+offsetX,440+offsetY)
+
+
 
 
 		-- for i,v in ipairs(handler.tiles) do
@@ -311,13 +314,13 @@ function love.draw()
 		love.graphics.printf("Press space to restart",offsetX+screenWidth/2,offsetY+screenHeight/2+50,1500,'center')
 
 
-		local offsetX = 350
+		local offsetX = 600
 		local offsetY = 0
 		useCustomFont(140)
 		love.graphics.setColor(9,33,22)
-		love.graphics.printf("SCORE:  "..score,screenWidth/2-CAM_X0-offsetX+8,-CAM_Y0+6,500,'center')
+		love.graphics.printf("SCORE:  "..score,screenWidth/2-CAM_X0-offsetX+8,-CAM_Y0+6,1000,'center')
 		love.graphics.setColor( 210,73, 95 )
-		love.graphics.printf("SCORE:  "..score,screenWidth/2-CAM_X0-offsetX,-CAM_Y0,500,'center')
+		love.graphics.printf("SCORE:  "..score,screenWidth/2-CAM_X0-offsetX,-CAM_Y0,1000,'center')
 
 		-- leaderboard
 		useCustomFont(80)
@@ -486,7 +489,9 @@ function restartGame()
 
 			timerStartDust = love.timer.getTime(),
 			DELAY_POP_DUST = 0.06,
-			popdust = true
+			popdust = true,
+
+			stack = 0
 
 		}
 

@@ -21,6 +21,8 @@ function updateItems(dt)
     				player.weapon.nbr_bullet = player.weapon.nbr_bullet+1
     			elseif v.item_type == 5 then -- SHOTGUN nombre de balle tire en un angle
     				player.weapon.nbr_bullet = player.weapon.nbr_bullet+1
+    			elseif v.item_type == 6 then -- SHIELD
+    				player.stack = player.stack+1	
     			end
     		end
     		pop_pickup_anim(v.pos.x-15,v.pos.y-15)
@@ -76,7 +78,7 @@ end
 
 function newPowerUp()
 	-- body
-	local rdm = math.random(4) -- Roll powerup
+	local rdm = math.random(5) -- Roll powerup
 	local local_x = 1
 	local local_y = 1
 
@@ -101,6 +103,10 @@ function newPowerUp()
 		ITEM_ANIM = newAnimation(POWERUP4_ANIM_IMG, 16, 22, 0.2, 0)
 		ITEM_ANIM:setMode("loop")
 		item_type = 5
+	elseif rdm == 5 then -- SHIEDL
+		ITEM_ANIM = newAnimation(POWERUP5_ANIM_IMG, 16, 24, 0.2, 0)
+		ITEM_ANIM:setMode("loop")
+		item_type = 6	
 	end
 
 
@@ -108,7 +114,7 @@ function newPowerUp()
 		item_type = item_type,
 		anim=ITEM_ANIM,
 		w=3*16,
-		h=3*20,
+		h=3*24,
 		pos={x=local_x, y=local_y}}
 	)
 end

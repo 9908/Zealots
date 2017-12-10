@@ -67,6 +67,9 @@ function love.keypressed (key)
 		if key == 'b' then
 			GAME_STATE = "LOSE"
 		end
+		if key == 'e' then
+			newPowerUp()
+		end
 	end
 
 end

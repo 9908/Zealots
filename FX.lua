@@ -68,6 +68,7 @@ function loadImg()
 	POWERUP2_ANIM_IMG = love.graphics.newImage("assets/power_up_minigun.png")
 	POWERUP3_ANIM_IMG = love.graphics.newImage("assets/power_up_rocket.png")
 	POWERUP4_ANIM_IMG = love.graphics.newImage("assets/power_up_shotgun.png")
+	POWERUP5_ANIM_IMG = love.graphics.newImage("assets/power_up_shield.png")
 
 	UI_IMG = love.graphics.newImage("assets/UI.png")
 	TORCH_IMG = love.graphics.newImage("assets/torche.png")
