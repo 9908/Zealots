@@ -31,6 +31,11 @@ function drawShrineTop()
 		shrine.anim_top:draw( shrine.pos.x-shrine.w/2, shrine.pos.y-shrine.h/2,0, 3, 3,0,0)
 	end
 		
+	for i = 1,shrine.popped do 
+		if i == shrine.popped then
+			love.graphics.draw(SHRINE_COMPLETE_IMG[i],shrine.pos.x-3*576/2+30,shrine.pos.y-320*2-20,0,3,4)
+		end
+	end
 end
 
 function updateShrine(dt)
@@ -43,6 +48,24 @@ function updateShrine(dt)
 		shrine.loaded = shrine.loaded + 0.1*dt
 	end
 	if shrine.loaded > 1 then
-		GAME_STATE = "LOSE"
+		if shrine.canPop  then
+			shrine.canPop = false
+			shrine.timerPopping = love.timer.getTime()
+			shrine.popped = shrine.popped + 1
+			if (shrine.popped % 2 == 0) then FX_whiteflicker() end
+			camera.shakedir = math.random(360)*2*math.pi/360
+			camera.shaketype = "shooting"
+			--SummonEnnemies(v.pos.x,v.pos.y,1,{ID=3,posx=v.pos.x, posy=v.pos.y}) 
+		end
+		if love.timer.getTime() - shrine.timerPopping > shrine.DELAY_POPPING and shrine.canPop == false then
+			shrine.canPop = true
+		end
+
+		if shrine.popped > 12 then
+			shrine.isPopping = false
+			shrine.popped = 0
+			shrine.loaded = 0
+			GAME_STATE = "LOSE"
+		end					
 	end
 end

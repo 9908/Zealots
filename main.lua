@@ -26,7 +26,7 @@ require ("middleclass")
 
 debug = true
 
-GAME_STATE = "START_MENU" -- START_MENU, PLAY - LOSE - WIN
+GAME_STATE = "LOSE" -- START_MENU, PLAY - LOSE - WIN
 SHOW_GRID = false
 
 TILE_W = 16*3
@@ -56,6 +56,17 @@ SHRINE_POS = {x = (I_max-1)/2 , y=(J_max-1)/2 }
 LOSE = false
 timerGameOver = love.timer.getTime()
 timerGameOverMAX = 1.5
+
+torches = {
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0
+}
 
 function love.load()
 	love.graphics.setBackgroundColor(255,255,255)
@@ -123,11 +134,13 @@ function love.draw()
 		drawCrates()
 		drawItems()
 		drawEnnemies()
+		--drawTorches()
 	 	drawPlayer()
 	 	drawShrineTop()
 		drawMessages()
 		drawFXTop()
 
+		love.graphics.draw(UI_IMG,CAM_X0+5,CAM_Y0+12,0,3,3)--BG_IMG:getWidth(),  BG_IMG:getHeight())
 		--love.graphics.setColor(0,0,0)
 		--love.graphics.print("Score: "..score,30+2,110+2)
 		--love.graphics.setColor(255,255,255)
@@ -136,13 +149,13 @@ function love.draw()
 
 		useCustomFont(50)
 		love.graphics.setColor(0,0,0)
-		love.graphics.print("Crates: "..player.crates_nbr,CAM_X0+30+2,CAM_Y0+30+2)
+		love.graphics.print("= "..player.crates_nbr,CAM_X0+120+2,CAM_Y0+15+2)
 		if player.crates_nbr == 0 then
 			love.graphics.setColor(255,25,1)
 		else
 			love.graphics.setColor(255,255,255)
 		end
-		love.graphics.print("Crates: "..player.crates_nbr,CAM_X0+30,CAM_Y0+30)
+		love.graphics.print("= "..player.crates_nbr,CAM_X0+120,CAM_Y0+15)
 
 
 		if start_new_wave == true and start_new_wave_pressed == false and table.getn(ennemies) == 0 then
@@ -242,46 +255,50 @@ function love.draw()
 
 		love.graphics.setBackgroundColor( 242,233, 227 )
 
-		MASK_ANIM:draw(screenWidth/2,screenHeight/2-225,0, 3, 3,55,0)
+		MASK_ANIM:draw(screenWidth/2-400,screenHeight/2-275,0, 3, 3,55,0)
+
+		KEYS_ANIM:draw(screenWidth/2+385,screenHeight/3,0, 3, 3,55,0)
+		MOUSE_LEFT_ANIM:draw(screenWidth/2+450,screenHeight/3+170,0, 3, 3,55,0)
+		MOUSE_RIGHT_ANIM:draw(screenWidth/2+450,screenHeight/3+320,0, 3, 3,55,0)
 
 		useCustomFont(200)
 		love.graphics.setColor(9,33,22)
-		love.graphics.printf("Zealots",screenWidth/2-500+10,screenHeight/2-400+10,1000,'center')
-		useCustomFont(60)
-		love.graphics.printf("Press space to start",screenWidth/2-760+4,screenHeight/2+350+3,1500,'center')
+		love.graphics.printf("Zealots",screenWidth/2-500+8,screenHeight/2-500+6,1000,'center')
+		useCustomFont(100)
+		love.graphics.printf("Press space to start",screenWidth/2-760+2,screenHeight/2+370+1,1500,'center')
 
 		love.graphics.setColor(74,48,57)
 		useCustomFont(200)
-		love.graphics.printf("Zealots",screenWidth/2-500,screenHeight/2-400,1000,'center')
-		useCustomFont(60)
-		love.graphics.printf("Press space to start",screenWidth/2-760,screenHeight/2+350,1500,'center')
+		love.graphics.printf("Zealots",screenWidth/2-500,screenHeight/2-500,1000,'center')
+		love.graphics.rectangle("fill",screenWidth/2-250+0,screenHeight/2-300+10,500,10)
+		useCustomFont(100)
+		love.graphics.printf("Press space to start",screenWidth/2-760,screenHeight/2+370,1500,'center')
 
-
-		useCustomFont(40)
-		local offsetX = -175
-		local offsetY = 100
 		love.graphics.setColor(9,33,22)
-		love.graphics.printf("WASD to move",offsetX+screenWidth/2+4,offsetY+screenHeight/2+3,1500,'center')
-		love.graphics.printf("Left click to shoot",offsetX+screenWidth/2+4,offsetY+screenHeight/2+50+3,1500,'center')
-		love.graphics.printf("Right click to place crate",offsetX+screenWidth/2+4,offsetY+screenHeight/2+100+3,1500,'center')
-		love.graphics.setColor(244,248,255 	)
-		love.graphics.printf("WASD to move",offsetX+screenWidth/2+4,offsetY+screenHeight/2+3,1500,'center')
-		love.graphics.printf("Left click to shoot",offsetX+screenWidth/2+4,offsetY+screenHeight/2+50+3,1500,'center')
-		love.graphics.printf("Right click to place crate",offsetX+screenWidth/2+4,offsetY+screenHeight/2+100+3,1500,'center')
+		love.graphics.printf("MOVE",screenWidth/2-50+2,screenHeight/3+1,1500,'left')
+		love.graphics.printf("SHOOT",screenWidth/2-50+2,screenHeight/3+150+1,1500,'left')
+		love.graphics.printf("CRATE",screenWidth/2-50+2,screenHeight/3+300+1,1500,'left')
+		love.graphics.setColor(74,48,57)
+		love.graphics.printf("MOVE",screenWidth/2-50,screenHeight/3,1500,'left')
+		love.graphics.printf("SHOOT",screenWidth/2-50,screenHeight/3+150,1500,'left')
+		love.graphics.printf("CRATE",screenWidth/2-50,screenHeight/3+300,1500,'left')
 
-		love.graphics.setColor(0,0,0)
- 		love.graphics.draw(MENU_TILE_IMG,0,21, 0, 3, 3, 0,0)
- 		love.graphics.draw(MENU_TILE_IMG,0,screenHeight-7*3-21, 0, 3, 3, 0,0)
+		--love.graphics.setColor(0,0,0)
+ 		--love.graphics.draw(MENU_TILE_IMG,0,21, 0, 3, 3, 0,0)
+ 		--love.graphics.draw(MENU_TILE_IMG,0,screenHeight-7*3-21, 0, 3, 3, 0,0)
+		love.graphics.rectangle("fill", CAM_X0, CAM_Y0,screenWidth-CAM_X0*2, 120)
+		love.graphics.rectangle("fill", CAM_X0, CAM_Y0+screenHeight,screenWidth-CAM_X0*2, CAM_Y0*2+screenHeight)
 
 		useDefaultFont()
 
 	elseif GAME_STATE ==  "LOSE" then
+		love.graphics.setBackgroundColor(74,48,57)
 
 		--love.graphics.draw(BG_IMG,CAM_X0/2,CAM_Y0/2,0,3,3)
-		MASK_ANIM:draw(screenWidth/2+400,screenHeight/2-300,0, 3, 3,55,0)
+		MASK_ANIM:draw(screenWidth/2+500,screenHeight/2-300,0, 3, 3,55,0)
 
-	 	drawShrineBot()
-	 	drawShrineTop()
+	 	--drawShrineBot()
+	 	--drawShrineTop()
 
 		useCustomFont(40)
 		local offsetX = -775
@@ -294,13 +311,26 @@ function love.draw()
 		love.graphics.printf("Press space to restart",offsetX+screenWidth/2,offsetY+screenHeight/2+50,1500,'center')
 
 
-		local offsetX = 0
+		local offsetX = 350
 		local offsetY = 0
 		useCustomFont(120)
 		love.graphics.setColor(9,33,22)
-		love.graphics.printf("SCORE:  "..score,offsetX+screenWidth/2+4,offsetY+3,1500,'center')
-		love.graphics.setColor(244,48,55 	)
-		love.graphics.printf("SCORE:  "..score,offsetX+screenWidth/2,offsetY,1500,'center')
+		love.graphics.printf("SCORE:  "..score,screenWidth/2-CAM_X0-offsetX+4,-CAM_Y0+3,500,'center')
+		love.graphics.setColor(244,48,55)
+		love.graphics.printf("SCORE:  "..score,screenWidth/2-CAM_X0-offsetX,-CAM_Y0,500,'center')
+
+		-- leaderboard
+		useCustomFont(40)
+		local offsetX = 350
+		local offsetY = 150
+		love.graphics.setColor(9,33,22)
+		love.graphics.printf("LEADERBOARD",screenWidth/2-CAM_X0-offsetX+4,-CAM_Y0+offsetY+3,1500,'center')
+		love.graphics.printf("Date",screenWidth/2-CAM_X0-offsetX+4,-CAM_Y0+3,1500,'center')
+		love.graphics.printf("Score",screenWidth/2-CAM_X0-offsetX+4,-CAM_Y0+3,1500,'center')
+		love.graphics.setColor(244,248,255 	)
+		love.graphics.printf("LEADERBOARD",screenWidth/2-CAM_X0-offsetX,-CAM_Y0,1500,'center')
+		love.graphics.printf("Date",screenWidth/2-CAM_X0-offsetX,-CAM_Y0,1500,'center')
+		love.graphics.printf("Score",screenWidth/2-CAM_X0-offsetX,-CAM_Y0,1500,'center')
 
 		useDefaultFont()
 		love.graphics.setColor(0,0,0)
@@ -357,6 +387,9 @@ function love.update(dt)
 		--camera:setPosition( player.pos.x , player.pos.y )
 	elseif GAME_STATE == "START_MENU" or GAME_STATE == "LOSE" then
 		MASK_ANIM:update(dt)
+		KEYS_ANIM:update(dt)
+		MOUSE_LEFT_ANIM:update(dt)
+		MOUSE_RIGHT_ANIM:update(dt)
 	end
 end
 function restartGame()
@@ -430,7 +463,11 @@ function restartGame()
 			anim_top = SHRINE_TOP_ANIM,
 			anim_bot = SHRINE_BOT_ANIM,
 			loaded = 0	, -- load max = 1
-			being_prayed = false
+			being_prayed = false,
+			canPop = false,
+			timerPopping =love.timer.getTime(),
+			popped = 0,
+			DELAY_POPPING = 0.1
 	}
 	local SFX = love.audio.newSource("assets/sounds/game_on.wav", "static")
 	SFX:setVolume(2)

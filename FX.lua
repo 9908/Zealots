@@ -37,6 +37,13 @@ function loadImg()
 	MASK_ANIM = newAnimation(love.graphics.newImage("assets/mask-anim.png"), 115, 211, 0.2, 0)
 	MASK_ANIM:setMode("loop")
 
+	MOUSE_LEFT_ANIM = newAnimation(love.graphics.newImage("assets/control_mouse_left_anim.png"), 18, 26, 0.5, 0)
+	MOUSE_LEFT_ANIM:setMode("loop")
+	MOUSE_RIGHT_ANIM = newAnimation(love.graphics.newImage("assets/control_mouse_right_anim.png"), 18, 26, 0.5, 0)
+	MOUSE_RIGHT_ANIM:setMode("loop")
+	KEYS_ANIM = newAnimation(love.graphics.newImage("assets/control_keys_anim.png"), 62, 40, 0.5, 0)
+	KEYS_ANIM:setMode("loop")
+
 	SHRINE_ANIM = newAnimation(love.graphics.newImage("assets/shrine_anim.png"), 46, 78, 0.2, 0)
 	SHRINE_ANIM:setMode("loop")
 	SHRINE_TOP_ANIM = newAnimation(love.graphics.newImage("assets/shrine_anim_top.png"), 46, 78, 0.2, 0)
@@ -61,6 +68,25 @@ function loadImg()
 	POWERUP2_ANIM_IMG = love.graphics.newImage("assets/power_up_minigun.png")
 	POWERUP3_ANIM_IMG = love.graphics.newImage("assets/power_up_rocket.png")
 	POWERUP4_ANIM_IMG = love.graphics.newImage("assets/power_up_shotgun.png")
+
+	UI_IMG = love.graphics.newImage("assets/UI.png")
+	TORCH_IMG = love.graphics.newImage("assets/torche.png")
+	TORCH_ANIM_IMG = love.graphics.newImage("assets/torche_anim.png")
+
+	SHRINE_COMPLETE_IMG = {
+		love.graphics.newImage("assets/shrine_complete_1.png"),
+		love.graphics.newImage("assets/shrine_complete_2.png"),
+		love.graphics.newImage("assets/shrine_complete_3.png"),
+		love.graphics.newImage("assets/shrine_complete_4.png"),
+		love.graphics.newImage("assets/shrine_complete_5.png"),
+		love.graphics.newImage("assets/shrine_complete_6.png"),
+		love.graphics.newImage("assets/shrine_complete_7.png"),
+		love.graphics.newImage("assets/shrine_complete_8.png"),
+		love.graphics.newImage("assets/shrine_complete_9.png"),
+		love.graphics.newImage("assets/shrine_complete_10.png"),
+		love.graphics.newImage("assets/shrine_complete_11.png"),
+		love.graphics.newImage("assets/shrine_complete_12.png"),
+	}
 
 	FOE_BULLET_TRAIL_ANIM_IMG = love.graphics.newImage("assets/bullet_foe_trail.png")
 	FOE1_DEATH_ANIM_IMG = love.graphics.newImage("assets/foe1_death.png")
@@ -197,19 +223,19 @@ function pop_foe_bullet_trail_anim(x,y)
 end
 
 function pop_player_death_anim(x,y,dir )
-	
+
 	local SFX = love.audio.newSource("assets/sounds/foe_death.wav", "static")
 	--SFX:setVolume(0.6)
 	SFX:play()
 
 	local animImg
-	
-	animImg = newAnimation(PLAYER_DEATH_ANIM_IMG, 22,26, 0.1, 0)	
-	
+
+	animImg = newAnimation(PLAYER_DEATH_ANIM_IMG, 22,26, 0.1, 0)
+
 
 	animImg:setMode("once")
 
-	
+
 	if dir == 1 then
 		table.insert(anims,{pos={ x = x+3*9, y = y-3*13 }, vit = {x=0,y=0} ,animation = animImg, scaleX =-3, scaleY = 3,loop=true,angle = 0,display_top = true})
 	else
@@ -233,7 +259,7 @@ function pop_foe_death_anim(x,y,dir,typeIA)
 	elseif typeIA == 4 then
 		animImg = newAnimation(BLOB_DEATH_ANIM_IMG, 12,16, 0.1, 0)
 	elseif typeIA == 5 then
-		animImg = newAnimation(BLOB_DEATH_ANIM_IMG, 12,16, 0.1, 0)	
+		animImg = newAnimation(BLOB_DEATH_ANIM_IMG, 12,16, 0.1, 0)
 	end
 
 	animImg:setMode("once")

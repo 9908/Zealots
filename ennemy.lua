@@ -84,7 +84,7 @@ function updateEnnemies(dt)
 							-- Shoot
 						if v.canShoot then
 							v.canShoot = false
-							ShootThePlayer(v) -- create bullet toward player
+							--ShootThePlayer(v) -- create bullet toward player
 							v.timerStart = love.timer.getTime()
 						end
 						if love.timer.getTime() - v.timerStart > v.bullet_reload and v.canShoot == false then
@@ -238,6 +238,7 @@ function updateEnnemies(dt)
 					pop_player_death_anim(player.pos.x,player.pos.y,player.dir)
 					timerGameOver = love.timer.getTime()
 					LOSE = true
+					FX_whiteflicker() 
 					--GAME_STATE = "LOSE"
 
 				end
@@ -310,7 +311,7 @@ function SummonEnnemies(local_x,local_y,nbr,type_en) -- Spawn new Ennemies
 		end
 
 		local random= love.math.random(2)
-		local random_IA =  love.math.random(5)
+		local random_IA =  1--love.math.random(5)
 		if not(type_en == nil) then 
 			random_IA = type_en.ID
 			posx = type_en.posx -love.math.random(32*2) + love.math.random(64*2)
