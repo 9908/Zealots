@@ -229,14 +229,16 @@ function updateEnnemies(dt)
 					pop_hit_anim(vv.pos.x-11,vv.pos.y-11/2,vv.vit.x,vv.vit.y)
 					table.remove(v.bullets,ii)
 				end
-				if Point_Rectangle_CollisionCheck(vv.pos.x,vv.pos.y,player.pos.x,player.pos.y,player.w,player.h) then
+				if Point_Rectangle_CollisionCheck(vv.pos.x,vv.pos.y,player.pos.x,player.pos.y,player.w,player.h) and not(player.dead) then
 					player.dead = true
 
 					local SFX = love.audio.newSource("assets/sounds/game_over.wav", "static")
 					--SFX:setVolume(0.6)
 					SFX:play()
-
-					GAME_STATE = "LOSE"
+					pop_player_death_anim(player.pos.x,player.pos.y,player.dir)
+					timerGameOver = love.timer.getTime()
+					LOSE = true
+					--GAME_STATE = "LOSE"
 
 				end
 				if vv.pos.x < -50 or vv.pos.x > screenWidth+50 or vv.pos.y < -50 or vv.pos.y > screenHeight+ 50 then -- remove out of screen bullets

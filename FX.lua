@@ -65,6 +65,7 @@ function loadImg()
 	FOE_BULLET_TRAIL_ANIM_IMG = love.graphics.newImage("assets/bullet_foe_trail.png")
 	FOE1_DEATH_ANIM_IMG = love.graphics.newImage("assets/foe1_death.png")
 	FOE2_DEATH_ANIM_IMG = love.graphics.newImage("assets/foe2_death.png")
+	PLAYER_DEATH_ANIM_IMG = love.graphics.newImage("assets/player_death.png")
 	BLOB_DEATH_ANIM_IMG = love.graphics.newImage("assets/blob_death.png")
 
 	FOE1_IDLE_ANIM_IMG = love.graphics.newImage("assets/foe1_idle.png")
@@ -77,7 +78,7 @@ function loadImg()
 	MINIBOSS_WALK_ANIM_IMG = love.graphics.newImage("assets/miniboss_walk.png")
 	MINIBOSS2_IDLE_ANIM_IMG = love.graphics.newImage("assets/miniboss2_idle.png")
 	MINIBOSS2_WALK_ANIM_IMG = love.graphics.newImage("assets/miniboss2_walk.png")
-	
+
 	-- for i = 1,5 do
 	-- 	for j = 1,5 do
 
@@ -195,6 +196,26 @@ function pop_foe_bullet_trail_anim(x,y)
 	table.insert(anims,{pos={ x = x, y = y }, vit = {x=0,y=0} ,animation = animImg, scaleX =3, scaleY = 3,loop=false,angle = 0,display_top = false})
 end
 
+function pop_player_death_anim(x,y,dir )
+	
+	local SFX = love.audio.newSource("assets/sounds/foe_death.wav", "static")
+	--SFX:setVolume(0.6)
+	SFX:play()
+
+	local animImg
+	
+	animImg = newAnimation(PLAYER_DEATH_ANIM_IMG, 22,26, 0.1, 0)	
+	
+
+	animImg:setMode("once")
+
+	
+	if dir == 1 then
+		table.insert(anims,{pos={ x = x+3*9, y = y-3*13 }, vit = {x=0,y=0} ,animation = animImg, scaleX =-3, scaleY = 3,loop=true,angle = 0,display_top = true})
+	else
+		table.insert(anims,{ pos={x = x-3*9, y = y - 3*13} , vit = {x=0,y=0},animation = animImg, scaleX =3, scaleY = 3,loop=true,angle = 0,display_top = true})
+	end
+end
 function pop_foe_death_anim(x,y,dir,typeIA)
 	--local angle_loc = math.atan2(vy*10, vx*10)
 
@@ -224,7 +245,7 @@ function pop_foe_death_anim(x,y,dir,typeIA)
 			table.insert(anims,{pos={ x = x+3*6, y = y-3*8}, vit = {x=0,y=0} ,animation = animImg, scaleX =-3, scaleY = 3,loop=false,angle = 0,display_top = true})
 		end
 	else
-	if dir == 1 then
+		if dir == 1 then
 			table.insert(anims,{ pos={x = x-3*9, y = y - 3*13} , vit = {x=0,y=0},animation = animImg, scaleX =3, scaleY = 3,loop=false,angle = 0,display_top = true})
 		else
 			table.insert(anims,{pos={ x = x+3*9, y = y-3*13 }, vit = {x=0,y=0} ,animation = animImg, scaleX =-3, scaleY = 3,loop=false,angle = 0,display_top = true})

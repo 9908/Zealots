@@ -42,22 +42,24 @@ function playerShoot()
 	local startX = player.pos.x 
 	local startY = player.pos.y 
 
-	for i = 1,player.weapon.nbr_bullet do
-		local mouseX = love.mouse.getX() + CAM_X0
-		local mouseY = love.mouse.getY() + CAM_Y0
-		local ii = i - player.weapon.nbr_bullet/2
-		local angle = math.atan2((mouseY - startY), (mouseX - startX)) + (ii)*math.pi/32
+	if LOSE == false then
+		for i = 1,player.weapon.nbr_bullet do
+			local mouseX = love.mouse.getX() + CAM_X0
+			local mouseY = love.mouse.getY() + CAM_Y0
+			local ii = i - player.weapon.nbr_bullet/2
+			local angle = math.atan2((mouseY - startY), (mouseX - startX)) + (ii)*math.pi/32
 
-		local bulletDx = 2.5*bulletSpeed * math.cos(angle)
-		local bulletDy = 2.5*bulletSpeed * math.sin(angle)
+			local bulletDx = 2.5*bulletSpeed * math.cos(angle)
+			local bulletDy = 2.5*bulletSpeed * math.sin(angle)
 
-		local shoot_SFX = love.audio.newSource("assets/sounds/shoot.wav", "static")
+			local shoot_SFX = love.audio.newSource("assets/sounds/shoot.wav", "static")
 
-		pop_pickup_anim(mouseX-12,mouseY-12)
+			pop_pickup_anim(mouseX-12,mouseY-12)
 
-		shoot_SFX:setVolume(0.6)
-		shoot_SFX:play()
-		table.insert(player.bullets,{ pos = {x = startX, y = startY}, vit = {x = bulletDx, y = bulletDy}, w=7,h=7,anim = BULLET_ANIM})
+			shoot_SFX:setVolume(0.6)
+			shoot_SFX:play()
+			table.insert(player.bullets,{ pos = {x = startX, y = startY}, vit = {x = bulletDx, y = bulletDy}, w=7,h=7,anim = BULLET_ANIM})
+		end
 	end
 end
 

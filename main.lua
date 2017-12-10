@@ -42,6 +42,7 @@ friction_mu = 0.01
 ACCELERATION = 1000
 
 bulletSpeed = 500
+bullet_reload = 4
 
 leaderboard = {}
 score = 0
@@ -51,6 +52,10 @@ time = 0
 txt_size = 60 + 20*math.sin(time)
 
 SHRINE_POS = {x = (I_max-1)/2 , y=(J_max-1)/2 }
+
+LOSE = false
+timerGameOver = love.timer.getTime()
+timerGameOverMAX = 1.5
 
 function love.load()
 	love.graphics.setBackgroundColor(255,255,255)
@@ -198,11 +203,14 @@ function love.draw()
 
 			love.graphics.print("directory: "..tostring(love.filesystem.getSaveDirectory()), 100+offsetX,380+offsetY)
 
-			
+
 			--love.graphics.print("leaderboard: "..tostring(leaderboard[#leaderboard].score), 100+offsetX,380+offsetY)
 			--if not(#leaderboard == 0) then
 			love.graphics.print("leaderboard: "..tostring(leaderboard[#leaderboard].score), 100+offsetX,400+offsetY)
 			--end
+
+
+			love.graphics.print("LOSE: "..tostring(LOSE), 100+offsetX,420+offsetY)
 
 
 
@@ -286,13 +294,13 @@ function love.draw()
 		love.graphics.printf("Press space to restart",offsetX+screenWidth/2,offsetY+screenHeight/2+50,1500,'center')
 
 
-		local offsetX = -1050
-		local offsetY = 200
+		local offsetX = 0
+		local offsetY = 0
 		useCustomFont(120)
 		love.graphics.setColor(9,33,22)
-		love.graphics.printf("SCORE:  "..score,offsetX+screenWidth/2-200+4,offsetY+screenHeight/3-100+3,1500,'center')
+		love.graphics.printf("SCORE:  "..score,offsetX+screenWidth/2+4,offsetY+3,1500,'center')
 		love.graphics.setColor(244,48,55 	)
-		love.graphics.printf("SCORE:  "..score,offsetX+screenWidth/2-200,offsetY+screenHeight/3-100,1500,'center')
+		love.graphics.printf("SCORE:  "..score,offsetX+screenWidth/2,offsetY,1500,'center')
 
 		useDefaultFont()
 		love.graphics.setColor(0,0,0)
@@ -324,6 +332,14 @@ function love.update(dt)
 	time = time+5*dt
 	if time > 2*math.pi then
 		time = 0
+	end
+
+	if LOSE == false then
+		timerGameOver = love.timer.getTime()
+	end
+	if LOSE == true and (love.timer.getTime() - timerGameOver > timerGameOverMAX) then
+		GAME_STATE = "LOSE"
+		LOSE = false
 	end
 
 	txt_size = 40 + 10*math.sin(time)
