@@ -7,13 +7,13 @@ function love.mousepressed(loc_x, loc_y, button)
 
 			AUTO_SHOOT = true
 
-			-- local startX = player.pos.x 
-			-- local startY = player.pos.y 
+			-- local startX = player.pos.x
+			-- local startY = player.pos.y
 			-- local mouseX = loc_x + CAM_X0
 			-- local mouseY = loc_y + CAM_Y0
-	 
+
 			-- local angle = math.atan2((mouseY - startY), (mouseX - startX))
-	 
+
 			-- local bulletDx = 2.5*bulletSpeed * math.cos(angle)
 			-- local bulletDy = 2.5*bulletSpeed * math.sin(angle)
 
@@ -34,21 +34,21 @@ end
 
 
 function love.mousereleased(loc_x, loc_y, button)
-	if button == 1 then 
+	if button == 1 then
 		AUTO_SHOOT = false
-	elseif button == 2 then 
+	elseif button == 2 then
 	 	SHOW_GRID = false
 		local mouseX = loc_x + CAM_X0
 		local mouseY = loc_y + CAM_Y0
 		if player.crates_nbr > 0 then
 			newBox(mouseX,mouseY)
-		end				
+		end
 	end
 end
 function love.keypressed (key)
 
    if key == 'escape' then
-		love.event.quit()		
+		love.event.quit()
    -- elseif key == "left" then
    -- 		applyforceX(player,-100)
    -- elseif key == "right" then
@@ -63,7 +63,12 @@ function love.keypressed (key)
    			restartGame()
    		end
 	end
-	
+	if debug then
+		if key == 'b' then
+			GAME_STATE = "LOSE"
+		end
+	end
+
 end
 
 -- MOVEMENT PHYSICS
@@ -90,7 +95,7 @@ function updateVelocity(v,dt)
 	if not(v.vit.y == 0) then
 		v.pos.y =  v.pos.y + stepY(v,nextY)
 	end
-	
+
 
 	-- friction decceleration
 	v.vit.x=v.vit.x*math.pow(friction_mu,dt)
@@ -109,7 +114,7 @@ function updateVelocity(v,dt)
 			pop_dust_anim(v.pos.x,v.pos.y+v.h/2,v.direction)
 		end
 		v.popdust = false
-		v.timerStartDust = love.timer.getTime() 
+		v.timerStartDust = love.timer.getTime()
 	end
 
 
@@ -187,9 +192,9 @@ function stepX(v,nextX )
 	for i, tile in ipairs(intersecting_tiles) do
 
 			if v.vit.x > 0  then -- facing right
-				distX = tile.pos.x-tile.w/2 - (v.pos.x + v.hitbox_w/2) 
-			elseif v.vit.x < 0 then  -- facing left 
-				distX = tile.pos.x+tile.w/2 - (v.pos.x - v.hitbox_w/2) 
+				distX = tile.pos.x-tile.w/2 - (v.pos.x + v.hitbox_w/2)
+			elseif v.vit.x < 0 then  -- facing left
+				distX = tile.pos.x+tile.w/2 - (v.pos.x - v.hitbox_w/2)
 			end
 
 	end
@@ -211,9 +216,9 @@ function stepY(v,nextY )
 	for i, tile in ipairs(intersecting_tiles) do
 
 			if v.vit.y > 0  then -- facing down
-				distY = tile.pos.y-tile.h/2 - (v.pos.y + v.hitbox_h/2) 
+				distY = tile.pos.y-tile.h/2 - (v.pos.y + v.hitbox_h/2)
 			elseif v.vit.y < 0 then  -- facing left
-				distY = tile.pos.y+tile.h/2 - (v.pos.y - v.hitbox_h/2) 
+				distY = tile.pos.y+tile.h/2 - (v.pos.y - v.hitbox_h/2)
 			end
 
 	end

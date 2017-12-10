@@ -26,7 +26,7 @@ require ("middleclass")
 
 debug = true
 
-GAME_STATE = "LOSE" -- START_MENU, PLAY - LOSE - WIN
+GAME_STATE = "START_MENU" -- START_MENU, PLAY - LOSE - WIN
 SHOW_GRID = false
 
 TILE_W = 16*3
@@ -58,7 +58,7 @@ timerGameOver = love.timer.getTime()
 timerGameOverMAX = 1.5
 
 torches = {
-	0,
+	1,
 	0,
 	0,
 	0,
@@ -134,7 +134,7 @@ function love.draw()
 		drawCrates()
 		drawItems()
 		drawEnnemies()
-		--drawTorches()
+		drawTorches()
 	 	drawPlayer()
 	 	drawShrineTop()
 		drawMessages()
@@ -270,7 +270,7 @@ function love.draw()
 		love.graphics.setColor(74,48,57)
 		useCustomFont(200)
 		love.graphics.printf("Zealots",screenWidth/2-500,screenHeight/2-500,1000,'center')
-		love.graphics.rectangle("fill",screenWidth/2-250+0,screenHeight/2-300+10,500,10)
+		love.graphics.rectangle("fill",screenWidth/2-250-70,screenHeight/2-300+0,660,16)
 		useCustomFont(100)
 		love.graphics.printf("Press space to start",screenWidth/2-760,screenHeight/2+370,1500,'center')
 
@@ -300,38 +300,87 @@ function love.draw()
 	 	--drawShrineBot()
 	 	--drawShrineTop()
 
-		useCustomFont(40)
+		useCustomFont(80)
 		local offsetX = -775
 		local offsetY = 200
 		love.graphics.setColor(9,33,22)
-		love.graphics.printf("You Lost Miserably",offsetX+screenWidth/2+4,offsetY+screenHeight/2+3,1500,'center')
-		love.graphics.printf("Press space to restart",offsetX+screenWidth/2+4,offsetY+screenHeight/2+50+3,1500,'center')
-		love.graphics.setColor(244,248,255 	)
-		love.graphics.printf("You Lost Miserably",offsetX+screenWidth/2+4,offsetY+screenHeight/2,1500,'center')
+		love.graphics.printf("You Lost Miserably",offsetX+screenWidth/2+6,offsetY+screenHeight/2+4,1500,'center')
+		love.graphics.printf("Press space to restart",offsetX+screenWidth/2+6,offsetY+screenHeight/2+50+4,1500,'center')
+		love.graphics.setColor( 242,233, 227 )
+		love.graphics.printf("You Lost Miserably",offsetX+screenWidth/2,offsetY+screenHeight/2,1500,'center')
 		love.graphics.printf("Press space to restart",offsetX+screenWidth/2,offsetY+screenHeight/2+50,1500,'center')
 
 
 		local offsetX = 350
 		local offsetY = 0
-		useCustomFont(120)
+		useCustomFont(140)
 		love.graphics.setColor(9,33,22)
-		love.graphics.printf("SCORE:  "..score,screenWidth/2-CAM_X0-offsetX+4,-CAM_Y0+3,500,'center')
-		love.graphics.setColor(244,48,55)
+		love.graphics.printf("SCORE:  "..score,screenWidth/2-CAM_X0-offsetX+8,-CAM_Y0+6,500,'center')
+		love.graphics.setColor( 210,73, 95 )
 		love.graphics.printf("SCORE:  "..score,screenWidth/2-CAM_X0-offsetX,-CAM_Y0,500,'center')
 
 		-- leaderboard
-		useCustomFont(40)
-		local offsetX = 350
+		useCustomFont(80)
+		local offsetX = 1100
 		local offsetY = 150
 		love.graphics.setColor(9,33,22)
-		love.graphics.printf("LEADERBOARD",screenWidth/2-CAM_X0-offsetX+4,-CAM_Y0+offsetY+3,1500,'center')
-		love.graphics.printf("Date",screenWidth/2-CAM_X0-offsetX+4,-CAM_Y0+3,1500,'center')
-		love.graphics.printf("Score",screenWidth/2-CAM_X0-offsetX+4,-CAM_Y0+3,1500,'center')
-		love.graphics.setColor(244,248,255 	)
-		love.graphics.printf("LEADERBOARD",screenWidth/2-CAM_X0-offsetX,-CAM_Y0,1500,'center')
-		love.graphics.printf("Date",screenWidth/2-CAM_X0-offsetX,-CAM_Y0,1500,'center')
-		love.graphics.printf("Score",screenWidth/2-CAM_X0-offsetX,-CAM_Y0,1500,'center')
+		love.graphics.printf("LEADERBOARD",screenWidth/2-CAM_X0-offsetX+6,-CAM_Y0+offsetY+4,1500,'center')
+		love.graphics.printf("Date",screenWidth/2-CAM_X0-offsetX-200+6,-CAM_Y0+offsetY+120+4,1500,'center')
+		love.graphics.printf("Score",screenWidth/2-CAM_X0-offsetX+200+4,-CAM_Y0+offsetY+120+4,1500,'center')
+		love.graphics.setColor( 242,233, 227 )
+		love.graphics.printf("LEADERBOARD",screenWidth/2-CAM_X0-offsetX,-CAM_Y0+offsetY,1500,'center')
+		love.graphics.rectangle("fill", screenWidth/2-CAM_X0-offsetX+550, -CAM_Y0+offsetY+100,400, 8)
+		love.graphics.printf("Date",screenWidth/2-CAM_X0-offsetX-200,-CAM_Y0+offsetY+120,1500,'center')
+		love.graphics.printf("Score",screenWidth/2-CAM_X0-offsetX+200,-CAM_Y0+offsetY+120,1500,'center')
+		love.graphics.rectangle("fill", screenWidth/2-CAM_X0-offsetX+350, -CAM_Y0+offsetY+200,800, 4)
 
+		useCustomFont(60)
+		if #leaderboard >= 5 then
+			love.graphics.printf(leaderboard[#leaderboard].date,screenWidth/2-CAM_X0-offsetX-200,-CAM_Y0+offsetY+220,1500,'center')
+			love.graphics.printf(leaderboard[#leaderboard].score,screenWidth/2-CAM_X0-offsetX+200,-CAM_Y0+offsetY+220,1500,'center')
+
+			love.graphics.printf(leaderboard[#leaderboard-1].date,screenWidth/2-CAM_X0-offsetX-200,-CAM_Y0+offsetY+260,1500,'center')
+			love.graphics.printf(leaderboard[#leaderboard-1].score,screenWidth/2-CAM_X0-offsetX+200,-CAM_Y0+offsetY+260,1500,'center')
+
+			love.graphics.printf(leaderboard[#leaderboard-2].date,screenWidth/2-CAM_X0-offsetX-200,-CAM_Y0+offsetY+300,1500,'center')
+			love.graphics.printf(leaderboard[#leaderboard-2].score,screenWidth/2-CAM_X0-offsetX+200,-CAM_Y0+offsetY+300,1500,'center')
+
+			love.graphics.printf(leaderboard[#leaderboard-3].date,screenWidth/2-CAM_X0-offsetX-200,-CAM_Y0+offsetY+340,1500,'center')
+			love.graphics.printf(leaderboard[#leaderboard-3].score,screenWidth/2-CAM_X0-offsetX+200,-CAM_Y0+offsetY+340,1500,'center')
+
+			love.graphics.printf(leaderboard[#leaderboard-3].date,screenWidth/2-CAM_X0-offsetX-200,-CAM_Y0+offsetY+380,1500,'center')
+			love.graphics.printf(leaderboard[#leaderboard-3].score,screenWidth/2-CAM_X0-offsetX+200,-CAM_Y0+offsetY+380,1500,'center')
+		elseif #leaderboard == 4 then
+			love.graphics.printf(leaderboard[#leaderboard].date,screenWidth/2-CAM_X0-offsetX-200,-CAM_Y0+offsetY+220,1500,'center')
+			love.graphics.printf(leaderboard[#leaderboard].score,screenWidth/2-CAM_X0-offsetX+200,-CAM_Y0+offsetY+220,1500,'center')
+
+			love.graphics.printf(leaderboard[#leaderboard-1].date,screenWidth/2-CAM_X0-offsetX-200,-CAM_Y0+offsetY+260,1500,'center')
+			love.graphics.printf(leaderboard[#leaderboard-1].score,screenWidth/2-CAM_X0-offsetX+200,-CAM_Y0+offsetY+260,1500,'center')
+
+			love.graphics.printf(leaderboard[#leaderboard-2].date,screenWidth/2-CAM_X0-offsetX-200,-CAM_Y0+offsetY+300,1500,'center')
+			love.graphics.printf(leaderboard[#leaderboard-2].score,screenWidth/2-CAM_X0-offsetX+200,-CAM_Y0+offsetY+300,1500,'center')
+
+			love.graphics.printf(leaderboard[#leaderboard-3].date,screenWidth/2-CAM_X0-offsetX-200,-CAM_Y0+offsetY+340,1500,'center')
+			love.graphics.printf(leaderboard[#leaderboard-3].score,screenWidth/2-CAM_X0-offsetX+200,-CAM_Y0+offsetY+340,1500,'center')
+		elseif #leaderboard == 3 then
+			love.graphics.printf(leaderboard[#leaderboard].date,screenWidth/2-CAM_X0-offsetX-200,-CAM_Y0+offsetY+220,1500,'center')
+			love.graphics.printf(leaderboard[#leaderboard].score,screenWidth/2-CAM_X0-offsetX+200,-CAM_Y0+offsetY+220,1500,'center')
+
+			love.graphics.printf(leaderboard[#leaderboard-1].date,screenWidth/2-CAM_X0-offsetX-200,-CAM_Y0+offsetY+260,1500,'center')
+			love.graphics.printf(leaderboard[#leaderboard-1].score,screenWidth/2-CAM_X0-offsetX+200,-CAM_Y0+offsetY+260,1500,'center')
+
+			love.graphics.printf(leaderboard[#leaderboard-2].date,screenWidth/2-CAM_X0-offsetX-200,-CAM_Y0+offsetY+300,1500,'center')
+			love.graphics.printf(leaderboard[#leaderboard-2].score,screenWidth/2-CAM_X0-offsetX+200,-CAM_Y0+offsetY+300,1500,'center')
+		elseif #leaderboard == 2 then
+			love.graphics.printf(leaderboard[#leaderboard].date,screenWidth/2-CAM_X0-offsetX-200,-CAM_Y0+offsetY+220,1500,'center')
+			love.graphics.printf(leaderboard[#leaderboard].score,screenWidth/2-CAM_X0-offsetX+200,-CAM_Y0+offsetY+220,1500,'center')
+
+			love.graphics.printf(leaderboard[#leaderboard-1].date,screenWidth/2-CAM_X0-offsetX-200,-CAM_Y0+offsetY+260,1500,'center')
+			love.graphics.printf(leaderboard[#leaderboard-1].score,screenWidth/2-CAM_X0-offsetX+200,-CAM_Y0+offsetY+260,1500,'center')
+		elseif #leaderboard == 1 then
+			love.graphics.printf(leaderboard[#leaderboard].date,screenWidth/2-CAM_X0-offsetX-200,-CAM_Y0+offsetY+220,1500,'center')
+			love.graphics.printf(leaderboard[#leaderboard].score,screenWidth/2-CAM_X0-offsetX+200,-CAM_Y0+offsetY+220,1500,'center')
+		end
 		useDefaultFont()
 		love.graphics.setColor(0,0,0)
 

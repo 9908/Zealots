@@ -179,7 +179,12 @@ function pop_crate_anim(posx,posy)
 	animImg = newAnimation(CRATE_ANIM_IMG, 23,23, 0.05, 0)
 	animImg:setMode("once")
 	table.insert(anims,{ pos={x = posx-34, y = posy-36}, vit={x=0,y=0} , animation = animImg, scaleX =3, scaleY = 3,loop=false,angle=0,display_top = true})
+end
 
+function pop_torch_anim(posx,posy)
+	animImg = newAnimation(TORCH_ANIM_IMG, 5,28, 0.05, 0)
+	animImg:setMode("loop")
+	table.insert(anims,{ pos={x = posx, y = posy}, vit={x=0,y=0} , animation = animImg, scaleX =3, scaleY = 3,loop=true,angle=0,display_top = true})
 end
 
 function pop_dust_anim(x,y,dir)
@@ -370,6 +375,22 @@ function drawFXBot()
 	for i, anim in ipairs(anims) do
 		if anim.display_top == false then
 			anim.animation:draw(anim.pos.x,anim.pos.y,anim.angle,anim.scaleX,anim.scaleY,0,0)
+		end
+	end
+
+end
+
+function  drawTorches( )
+	local radius = 50*3 -- hardcoded also in ennemy
+	for i, v in ipairs(torches) do
+		local angle = (i-1)*2*math.pi/8 +math.pi/2
+		local posx = shrine.pos.x + radius*math.cos(angle)
+		local posy = shrine.pos.y + radius*math.sin(angle)
+		love.graphics.draw(TORCH_IMG,posx,posy,0,3,3)
+
+		if nbr == i and  token > 0 then
+			token = token - 1
+			pop_torch_anim(posx,posy)
 		end
 	end
 
