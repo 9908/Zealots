@@ -63,7 +63,7 @@ function love.keypressed (key)
    			restartGame()
    		end
 	end
-
+	
 end
 
 -- MOVEMENT PHYSICS

@@ -6,8 +6,14 @@ function drawCrates()
  		love.graphics.draw(BOX_SHADOW_IMG,v.pos.x-27,v.pos.y-30, 0, 3, 3, 0,0)
     	if v.health == HEALTH_MAX then
  			love.graphics.draw(v.img,v.pos.x-v.w/2,v.pos.y-v.h/2, 0, 3, 3, 0,0)
- 		else
- 			love.graphics.draw(v.img_damaged,v.pos.x-v.w/2,v.pos.y-v.h/2, 0, 3, 3, 0,0)
+ 		elseif v.health == HEALTH_MAX-1 then
+ 			love.graphics.draw(v.img_d1,v.pos.x-v.w/2,v.pos.y-v.h/2, 0, 3, 3, 0,0)
+		elseif v.health == HEALTH_MAX-2 then
+ 			love.graphics.draw(v.img_d2,v.pos.x-v.w/2,v.pos.y-v.h/2, 0, 3, 3, 0,0)
+		elseif v.health == HEALTH_MAX-3 then
+ 			love.graphics.draw(v.img_d3,v.pos.x-v.w/2,v.pos.y-v.h/2, 0, 3, 3, 0,0)
+		elseif v.health == HEALTH_MAX-4 then
+ 			love.graphics.draw(v.img_d4,v.pos.x-v.w/2,v.pos.y-v.h/2, 0, 3, 3, 0,0)
  		end
 	end
 end
@@ -23,16 +29,33 @@ function updateCrates(dt)
 			handler:updateMap(index_i,index_j,0)
 
 			-- update paths of ennemies
-			for ii,vv in ipairs(ennemies) do  -- check if there is already a crate there	
+			for ii,vv in ipairs(ennemies) do  -- check if there is already a crate there
 				if vv.IA == 1 then
     				vv.path = computePathtoGoal(vv.pos,shrine)
-    			else 
-    				vv.path = computePathtoGoal(vv.pos,player)  
+    			else
+    				vv.path = computePathtoGoal(vv.pos,player)
     			end
 			end
 
     	end
 	end
+end
+
+function checkOccupiedSpot(index_i, index_j)
+	occupied_spot = false
+
+	for i,v in ipairs(crates) do  -- check if there is already a crate there
+    	if v.i == index_i and v.j == index_j then
+    		occupied_spot = true
+    	end
+	end
+	for i,v in ipairs(items) do  -- check if there is already a crate there
+    	if v.i == index_i and v.j == index_j then
+    		occupied_spot = true
+    	end
+	end
+
+	return occupied_spot
 end
 
 function newBox( x,y )
@@ -41,15 +64,9 @@ function newBox( x,y )
 	local index_i = math.floor(x/TILE_W)+1
 	local index_j = math.floor(y/TILE_H)+1
 
-	local occupied_spot = false
 
-	for i,v in ipairs(crates) do  -- check if there is already a crate there	
-    	if v.i == index_i and v.j == index_j then
-    		occupied_spot = true
-    	end
-	end
 
-	if occupied_spot == false then
+	if checkOccupiedSpot(index_i, index_j) == false then
 		player.crates_nbr = player.crates_nbr -1
 		local posx = index_i*TILE_W-TILE_W/2
 		local posy = index_j*TILE_H-TILE_H/2
@@ -57,23 +74,26 @@ function newBox( x,y )
 			i=index_i,
 			j=index_j,
 			img=BOX_IMG,
-			img_damaged = BOX_DAMAGED_IMG,
+			img_d1 = BOX_D1_IMG,
+			img_d2 = BOX_D2_IMG,
+			img_d3 = BOX_D3_IMG,
+			img_d4 = BOX_D4_IMG,
 			w=3*BOX_IMG:getWidth(),
 			h=3*BOX_IMG:getHeight(),
 			pos={x=posx,y=posy},
 			health = 5}
 		)
-		
+
 		pop_crate_anim(posx,posy)
 		-- update map
 		handler:updateMap(index_i,index_j,1)
 
 		-- update paths of ennemies
-		for i,v in ipairs(ennemies) do  -- check if there is already a crate there	
+		for i,v in ipairs(ennemies) do  -- check if there is already a crate there
 			if v.IA == 1 then
     			v.path = computePathtoGoal(v.pos,shrine)
-    		else 
-    			v.path = computePathtoGoal(v.pos,player)  
+    		else
+    			v.path = computePathtoGoal(v.pos,player)
     		end
 		end
 

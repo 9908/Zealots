@@ -19,7 +19,10 @@ function loadImg()
 
 	BOX_IMG = love.graphics.newImage('assets/box.png')
 	BOX_SHADOW_IMG = love.graphics.newImage('assets/box_shadow.png')
-	BOX_DAMAGED_IMG = love.graphics.newImage('assets/box_damaged.png')
+	BOX_D1_IMG = love.graphics.newImage('assets/box_d1.png')
+	BOX_D2_IMG = love.graphics.newImage('assets/box_d2.png')
+	BOX_D3_IMG = love.graphics.newImage('assets/box_d3.png')
+	BOX_D4_IMG = love.graphics.newImage('assets/box_d4.png')
 	ITEM_SHADOW_IMG = love.graphics.newImage('assets/item_shadow.png')
 	BG_IMG = love.graphics.newImage('assets/bg.png')
 	MENU_TILE_IMG = love.graphics.newImage('assets/menu_tile.png')
@@ -53,6 +56,12 @@ function loadImg()
 	DUST_ANIM_IMG = love.graphics.newImage("assets/dust.png")
 	PICKUP_ANIM_IMG = love.graphics.newImage("assets/pickup.png")
 	BULLET_TRAIL_ANIM_IMG = love.graphics.newImage("assets/bullet_trail.png")
+	ITEM_ANIM_IMG = love.graphics.newImage("assets/item.png")
+	POWERUP1_ANIM_IMG = love.graphics.newImage("assets/power_up_laser.png")
+	POWERUP2_ANIM_IMG = love.graphics.newImage("assets/power_up_minigun.png")
+	POWERUP3_ANIM_IMG = love.graphics.newImage("assets/power_up_rocket.png")
+	POWERUP4_ANIM_IMG = love.graphics.newImage("assets/power_up_shotgun.png")
+
 	FOE_BULLET_TRAIL_ANIM_IMG = love.graphics.newImage("assets/bullet_foe_trail.png")
 	FOE1_DEATH_ANIM_IMG = love.graphics.newImage("assets/foe1_death.png")
 	FOE2_DEATH_ANIM_IMG = love.graphics.newImage("assets/foe2_death.png")
@@ -64,6 +73,11 @@ function loadImg()
 	FOE2_IDLE_ANIM_IMG = love.graphics.newImage("assets/foe2_idle.png")
 	FOE2_WALK_ANIM_IMG = love.graphics.newImage("assets/foe2_walk.png")
 	BLOB_WALK_ANIM_IMG = love.graphics.newImage("assets/blob_walk.png")
+	MINIBOSS_IDLE_ANIM_IMG = love.graphics.newImage("assets/miniboss_idle.png")
+	MINIBOSS_WALK_ANIM_IMG = love.graphics.newImage("assets/miniboss_walk.png")
+	MINIBOSS2_IDLE_ANIM_IMG = love.graphics.newImage("assets/miniboss2_idle.png")
+	MINIBOSS2_WALK_ANIM_IMG = love.graphics.newImage("assets/miniboss2_walk.png")
+	
 	-- for i = 1,5 do
 	-- 	for j = 1,5 do
 
@@ -195,6 +209,10 @@ function pop_foe_death_anim(x,y,dir,typeIA)
 		animImg = newAnimation(FOE2_DEATH_ANIM_IMG, 22,26, 0.1, 0)
 	elseif typeIA == 3 then
 		animImg = newAnimation(BLOB_DEATH_ANIM_IMG, 12,16, 0.1, 0)
+	elseif typeIA == 4 then
+		animImg = newAnimation(BLOB_DEATH_ANIM_IMG, 12,16, 0.1, 0)
+	elseif typeIA == 5 then
+		animImg = newAnimation(BLOB_DEATH_ANIM_IMG, 12,16, 0.1, 0)	
 	end
 
 	animImg:setMode("once")

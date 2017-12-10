@@ -41,21 +41,24 @@ end
 function playerShoot()
 	local startX = player.pos.x 
 	local startY = player.pos.y 
-	local mouseX = love.mouse.getX() + CAM_X0
-	local mouseY = love.mouse.getY() + CAM_Y0
- 
-	local angle = math.atan2((mouseY - startY), (mouseX - startX))
 
-	local bulletDx = 2.5*bulletSpeed * math.cos(angle)
-	local bulletDy = 2.5*bulletSpeed * math.sin(angle)
+	for i = 1,player.weapon.nbr_bullet do
+		local mouseX = love.mouse.getX() + CAM_X0
+		local mouseY = love.mouse.getY() + CAM_Y0
+		local ii = i - player.weapon.nbr_bullet/2
+		local angle = math.atan2((mouseY - startY), (mouseX - startX)) + (ii)*math.pi/32
 
-	local shoot_SFX = love.audio.newSource("assets/sounds/shoot.wav", "static")
+		local bulletDx = 2.5*bulletSpeed * math.cos(angle)
+		local bulletDy = 2.5*bulletSpeed * math.sin(angle)
 
-	pop_pickup_anim(mouseX-12,mouseY-12)
+		local shoot_SFX = love.audio.newSource("assets/sounds/shoot.wav", "static")
 
-	shoot_SFX:setVolume(0.6)
-	shoot_SFX:play()
-	table.insert(player.bullets,{ pos = {x = startX, y = startY}, vit = {x = bulletDx, y = bulletDy}, w=7,h=7,anim = BULLET_ANIM})
+		pop_pickup_anim(mouseX-12,mouseY-12)
+
+		shoot_SFX:setVolume(0.6)
+		shoot_SFX:play()
+		table.insert(player.bullets,{ pos = {x = startX, y = startY}, vit = {x = bulletDx, y = bulletDy}, w=7,h=7,anim = BULLET_ANIM})
+	end
 end
 
 function updatePlayer(dt)
@@ -121,17 +124,18 @@ function updatePlayer(dt)
 		pop_bullet_trail_anim(v.pos.x-v.w/2,v.pos.y-v.h/2)
 		for j,w in ipairs(ennemies) do
 			if Point_Rectangle_CollisionCheck(v.pos.x,v.pos.y,w.pos.x,w.pos.y,w.w,w.h) then
-				Ennemy_hit(w,1,j)
+				if start_new_wave == true then
+					Ennemy_hit(w,1,j)
+					pop_hit_anim(v.pos.x-11,v.pos.y-11/2,v.vit.x,v.vit.y)
+					table.remove(player.bullets,i)
+				end
 
-				pop_hit_anim(v.pos.x-11,v.pos.y-11/2,v.vit.x,v.vit.y)
-
-				table.remove(player.bullets,i)
 			end
 		end
 		for j,w in ipairs(crates) do
 			if Point_Rectangle_CollisionCheck(v.pos.x,v.pos.y,w.pos.x,w.pos.y,w.w,w.h) then
 
-			pop_hit_anim(v.pos.x-11,v.pos.y-11/2,v.vit.x,v.vit.y)
+				pop_hit_anim(v.pos.x-11,v.pos.y-11/2,v.vit.x,v.vit.y)
 
 				table.remove(player.bullets,i)
 				w.health = w.health - 1

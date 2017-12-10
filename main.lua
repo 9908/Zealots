@@ -9,6 +9,8 @@ require("waves")
 require("text")
 require("FX")
 require("camera")
+require('table_tools')
+require("leaderboard_fun")
 
 require ("astar")
 require ("class")
@@ -20,6 +22,7 @@ require ("tiledmaphandler")
 require ("middleclass")
 require ("middleclass")
 require ("middleclass")
+
 
 debug = true
 
@@ -39,8 +42,8 @@ friction_mu = 0.01
 ACCELERATION = 1000
 
 bulletSpeed = 500
-bullet_reload = 4
 
+leaderboard = {}
 score = 0
 wave = 0 							-- Current wave numbering
 
@@ -52,6 +55,8 @@ SHRINE_POS = {x = (I_max-1)/2 , y=(J_max-1)/2 }
 function love.load()
 	love.graphics.setBackgroundColor(255,255,255)
 
+	-- load leaderboard
+	loadLeaderboard()
 
 	-- load img
 	loadImg()
@@ -97,7 +102,7 @@ function love.draw()
 					love.graphics.line(  love.mouse.getX() +CAM_X0 -  dist ,i*16*3, love.mouse.getX()+CAM_X0 + dist , i*16*3 )
 				end
 
-				for j,w in ipairs(v) do 
+				for j,w in ipairs(v) do
 					local 	dist = math.sqrt(math.pow(radius,2)-math.pow((love.mouse.getX()+CAM_X0-j*16*3),2))
 					if dist <= radius then
 						love.graphics.line( j*16*3,	love.mouse.getY() +CAM_Y0 -  dist, 		j*16*3,		love.mouse.getY() +CAM_Y0 +  dist)
@@ -118,10 +123,10 @@ function love.draw()
 		drawMessages()
 		drawFXTop()
 
-		-- love.graphics.setColor(0,0,0)
-		-- love.graphics.print("Score: "..score,30+2,110+2)
-		-- love.graphics.setColor(255,255,255)
-		-- love.graphics.print("Score: "..score,30,110)
+		--love.graphics.setColor(0,0,0)
+		--love.graphics.print("Score: "..score,30+2,110+2)
+		--love.graphics.setColor(255,255,255)
+		--love.graphics.print("Score: "..score,30,110)
 
 
 		useCustomFont(50)
@@ -188,6 +193,16 @@ function love.draw()
 			love.graphics.print("screenWidth: "..(screenWidth-CAM_X0), 100+offsetX,330+offsetY)
 			love.graphics.print("mouseX: "..tostring(love.mouse.getX()), 100+offsetX,340+offsetY)
 
+			love.graphics.print("bullet_reload player: "..tostring(player.weapon.bullet_reload), 100+offsetX,360+offsetY)
+
+
+			love.graphics.print("directory: "..tostring(love.filesystem.getSaveDirectory()), 100+offsetX,380+offsetY)
+
+			
+			--love.graphics.print("leaderboard: "..tostring(leaderboard[#leaderboard].score), 100+offsetX,380+offsetY)
+			--if not(#leaderboard == 0) then
+			love.graphics.print("leaderboard: "..tostring(leaderboard[#leaderboard].score), 100+offsetX,400+offsetY)
+			--end
 
 
 
@@ -305,7 +320,7 @@ function love.update(dt)
 	-- if dt < 1/60 then
 	-- 	love.timer.sleep(1/60 - dt)
 	-- end
-	
+
 	time = time+5*dt
 	if time > 2*math.pi then
 		time = 0
@@ -331,6 +346,10 @@ end
 function restartGame()
 	GAME_STATE = "PLAY"
 
+    if not(score == 0) then
+	    saveScore()
+    end
+
 	graph = {} -- Graph of available walking area nodes for A*
 	path_test = {}
 
@@ -353,7 +372,8 @@ function restartGame()
 			weapon= {
 				timerAutoShoot = love.timer.getTime(),
 				canShoot = false,
-				bullet_reload = 0.3
+				bullet_reload = 0.3,
+				nbr_bullet = 1
 			},
 			crates_nbr = 8,
 

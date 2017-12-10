@@ -6,6 +6,8 @@ function drawEnnemies()
 	   --  love.graphics.rectangle("fill",v.pos.x-v.w/2,v.pos.y-v.h/2,v.w,v.h)
 	    	if v.IA == 3 then
 				love.graphics.draw(SHADOW_IMG,v.pos.x-v.w/2+12, v.pos.y+v.h/2-5, 0, 3, 3,0,0)
+			elseif v.IA == 4 or v.IA == 5 then
+				--love.graphics.draw(SHADOW_IMG,v.pos.x-v.w/2+12, v.pos.y+v.h/2-5, 0, 3, 3,0,0)	
 	    	else
 				love.graphics.draw(SHADOW_IMG,v.pos.x-v.w/2+12, v.pos.y+v.h/2, 0, 3, 3,0,0)
 			end
@@ -85,7 +87,7 @@ function updateEnnemies(dt)
 							ShootThePlayer(v) -- create bullet toward player
 							v.timerStart = love.timer.getTime()
 						end
-						if love.timer.getTime() - v.timerStart > bullet_reload+math.random(0,3) and v.canShoot == false then
+						if love.timer.getTime() - v.timerStart > v.bullet_reload and v.canShoot == false then
 							v.canShoot = true
 						end
 					end
@@ -97,7 +99,7 @@ function updateEnnemies(dt)
 					ShootThePlayer(v) -- create bullet toward player
 					v.timerStart = love.timer.getTime()
 				end
-				if love.timer.getTime() - v.timerStart > bullet_reload+math.random(0,3) and v.canShoot == false then
+				if love.timer.getTime() - v.timerStart > v.bullet_reload and v.canShoot == false then
 					v.canShoot = true
 				end
 
@@ -110,13 +112,71 @@ function updateEnnemies(dt)
 					ShootThePlayer(v) -- create bullet toward player
 					v.timerStart = love.timer.getTime()
 				end
-				if love.timer.getTime() - v.timerStart > bullet_reload+math.random(0,3) and v.canShoot == false then
+				if love.timer.getTime() - v.timerStart > v.bullet_reload and v.canShoot == false then
 					v.canShoot = true
 				end
 
 				-- update a* path
 				v.path = computePathtoGoal(v.pos,player)
+			elseif v.IA == 4 then -- MiniBoss IA
+				-- Shoot
+				if v.canShoot  then
+					v.canShoot = false
+					v.isPopping = true
+					v.timerStart = love.timer.getTime()
+				end
+				if love.timer.getTime() - v.timerStart > v.bullet_reload and v.canShoot == false then
+					v.canShoot = true
+				end
+
+				if v.isPopping then
+					if v.canPop  then
+						v.canPop = false
+						v.timerPopping = love.timer.getTime()
+						v.popped = v.popped + 1
+						ShootThePlayer(v) -- create bullet toward player
+					end
+					if love.timer.getTime() - v.timerPopping > v.DELAY_POPPING and v.canPop == false then
+						v.canPop = true
+					end
+
+					if v.popped > 5 then
+						v.isPopping = false
+						v.popped = 0
+					end
+				end
+				v.path = computePathtoGoal(v.pos,player)	
+			elseif v.IA == 5 then -- MiniBoss IA 
+				-- Shoot
+				if v.canShoot  then
+					v.canShoot = false
+					v.isPopping = true
+					v.timerStart = love.timer.getTime()
+				end
+				if love.timer.getTime() - v.timerStart > v.bullet_reload and v.canShoot == false then
+					v.canShoot = true
+				end
+
+				if v.isPopping then
+					if v.canPop  then
+						v.canPop = false
+						v.timerPopping = love.timer.getTime()
+						v.popped = v.popped + 1
+						SummonEnnemies(v.pos.x,v.pos.y,1,{ID=3,posx=v.pos.x, posy=v.pos.y}) 
+					end
+					if love.timer.getTime() - v.timerPopping > v.DELAY_POPPING and v.canPop == false then
+						v.canPop = true
+					end
+
+					if v.popped > 5 then
+						v.isPopping = false
+						v.popped = 0
+					end					
+				end
+				v.path = computePathtoGoal(v.pos,player)	
 			end
+
+			
 
 
 			-- MOVEMENT
@@ -126,6 +186,12 @@ function updateEnnemies(dt)
 				local acc_local = ACCELERATION
 				if v.IA == 3 then
 					acc_local = 3*ACCELERATION
+				elseif v.IA == 4 or v.IA == 5 then
+					if v.isPopping then
+						acc_local = 0
+					else
+						acc_local = ACCELERATION/2
+					end
 				end
 				if math.abs(diffx)==diffx then
 					v.acc.x=acc_local/3.5
@@ -171,6 +237,7 @@ function updateEnnemies(dt)
 					SFX:play()
 
 					GAME_STATE = "LOSE"
+
 				end
 				if vv.pos.x < -50 or vv.pos.x > screenWidth+50 or vv.pos.y < -50 or vv.pos.y > screenHeight+ 50 then -- remove out of screen bullets
 					table.remove(v.bullets,ii)
@@ -201,7 +268,7 @@ function ShootThePlayer( v )
 	table.insert(v.bullets,{ pos = {x = startX, y = startY}, vit = {x = bulletDx, y = bulletDy}, w=5,h=5,anim = BULLET_FOE_ANIM})
 end
 
-function SummonEnnemies(local_x,local_y,nbr) -- Spawn new Ennemies
+function SummonEnnemies(local_x,local_y,nbr,type_en) -- Spawn new Ennemies
 	pos_spawn_eff = {}
 	for i = 1,nbr do
 		local random_dir = love.math.random(4)
@@ -241,7 +308,12 @@ function SummonEnnemies(local_x,local_y,nbr) -- Spawn new Ennemies
 		end
 
 		local random= love.math.random(2)
-		local random_IA =  love.math.random(3)
+		local random_IA =  love.math.random(5)
+		if not(type_en == nil) then 
+			random_IA = type_en.ID
+			posx = type_en.posx -love.math.random(32*2) + love.math.random(64*2)
+			posy = type_en.posy -love.math.random(32*2) + love.math.random(64*2)
+		end
 
 		local ENNEMY_idle = nil
 		local ENNEMY_walk = nil
@@ -249,6 +321,7 @@ function SummonEnnemies(local_x,local_y,nbr) -- Spawn new Ennemies
 
 		local width = 10
 		local height = 10
+		local br = 4
 		if random_IA == 1 then
 			ENNEMY_idle = newAnimation(FOE1_IDLE_ANIM_IMG, 12, 22, 0.1, 0)
 			ENNEMY_idle:setMode("loop")
@@ -269,7 +342,7 @@ function SummonEnnemies(local_x,local_y,nbr) -- Spawn new Ennemies
 
 			width = 3*12
 			height = 3*20
-		elseif random_IA == 3 then
+		elseif random_IA == 3 then --  BLOB
 			ENNEMY_idle = newAnimation(BLOB_WALK_ANIM_IMG, 12, 12, 0.1, 0)
 			ENNEMY_idle:setMode("loop")
 			ENNEMY_walk = newAnimation(BLOB_WALK_ANIM_IMG, 12, 12, 0.2, 0)
@@ -279,6 +352,29 @@ function SummonEnnemies(local_x,local_y,nbr) -- Spawn new Ennemies
 
 			width = 3*12
 			height = 3*12
+			br = 2
+		elseif random_IA == 4 then -- Miniboss shoot
+			ENNEMY_idle = newAnimation(MINIBOSS_IDLE_ANIM_IMG, 25, 31, 0.1, 0)
+			ENNEMY_idle:setMode("loop")
+			ENNEMY_walk = newAnimation(MINIBOSS_WALK_ANIM_IMG, 25, 31, 0.2, 0)
+			ENNEMY_walk:setMode("loop")
+			ENNEMY_pray = newAnimation(MINIBOSS_WALK_ANIM_IMG, 25, 31, 0.2, 0)
+			ENNEMY_pray:setMode("loop")
+
+			width = 3*25
+			height = 3*31	
+			br = 10
+		elseif random_IA == 5 then -- Miniboss spawn
+			ENNEMY_idle = newAnimation(MINIBOSS2_IDLE_ANIM_IMG, 25, 31, 0.1, 0)
+			ENNEMY_idle:setMode("loop")
+			ENNEMY_walk = newAnimation(MINIBOSS2_WALK_ANIM_IMG, 25, 31, 0.2, 0)
+			ENNEMY_walk:setMode("loop")
+			ENNEMY_pray = newAnimation(MINIBOSS2_WALK_ANIM_IMG, 25, 31, 0.2, 0)
+			ENNEMY_pray:setMode("loop")
+
+			width = 3*25
+			height = 3*31	
+			br = 10	
 		end
 
 		local newEnnemy = {
@@ -299,12 +395,21 @@ function SummonEnnemies(local_x,local_y,nbr) -- Spawn new Ennemies
 			path = computePathtoGoal({x = posx, y=posy},shrine),
 			praying = false,
 			bullets = {},
+
+			bullet_reload = br+math.random(0,3),
 			canShoot = true,
 			timerStart = love.timer.getTime(),
 
 			timerStartDust = love.timer.getTime(),
 			DELAY_POP_DUST = 0.19,
-			popdust = true
+			popdust = true,
+
+			timerPopping = love.timer.getTime(),
+			isPopping = false,
+			DELAY_POPPING = 0.5,
+			canPop = false,
+			popped = 0
+
 	}
 	table.insert(ennemies, newEnnemy)
 	end
