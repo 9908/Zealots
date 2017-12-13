@@ -143,7 +143,7 @@ function update_current_popping(dt)
 			WAVE.timerPopEnnemy = love.timer.getTime()
 			
 			if wave > #WEN then
-				if WAVE.ennemy_popped <= (WAVE.current_batch.nbr + WAVE.current_batch.nbr*(wave-#WEN)/4) then
+				if WAVE.ennemy_popped <= (WAVE.current_batch.nbr + WAVE.current_batch.nbr*(wave-#WEN)/4) or ennemies == {}then
 					SummonEnnemies(1,WAVE.current_batch,false)
 					WAVE.ennemy_popped = WAVE.ennemy_popped + 1
 				else
@@ -155,7 +155,7 @@ function update_current_popping(dt)
 					WAVE.ennemy_popped = 0	
 				end
 			else
-				if WAVE.ennemy_popped <= WAVE.current_batch.nbr then
+				if WAVE.ennemy_popped <= WAVE.current_batch.nbr  or ennemies == {} then
 					SummonEnnemies(1,WAVE.current_batch,false)
 					WAVE.ennemy_popped = WAVE.ennemy_popped + 1
 				else

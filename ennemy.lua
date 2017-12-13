@@ -42,7 +42,7 @@ function drawEnnemies()
 end
 
 function computePathtoGoal(pos_start,goal_to_reach)
-
+	
    local start = {
      x = math.floor(pos_start.x/TILE_W)+1,
      y = math.floor(pos_start.y/TILE_H)+1
@@ -268,9 +268,12 @@ function ShootThePlayer( v )
 	local targetY = player.pos.y
 
 	local angle = math.atan2((targetY - startY), (targetX - startX))
-
-	local bulletDx = 0.5*bulletSpeed * math.cos(angle)
-	local bulletDy = 0.5*bulletSpeed * math.sin(angle)
+	local b_speed = bulletSpeed
+	if v.IA == 4 or v.IA == 5 then 
+		b_speed = 1.8*bulletSpeed
+	end
+	local bulletDx = 0.5*b_speed * math.cos(angle)
+	local bulletDy = 0.5*b_speed * math.sin(angle)
 
 	table.insert(v.bullets,{ pos = {x = startX, y = startY}, vit = {x = bulletDx, y = bulletDy}, w=5,h=5,anim = BULLET_FOE_ANIM})
 end
@@ -318,6 +321,7 @@ function SummonEnnemies(nbr,type_en,ennemy_spawn) -- Spawn new Ennemies
 		local width = 10
 		local height = 10
 		local br = 4
+		local hp = 1
 		if random_IA == 1 then
 			ENNEMY_idle = newAnimation(FOE1_IDLE_ANIM_IMG, 12, 22, 0.1, 0)
 			ENNEMY_idle:setMode("loop")
@@ -348,7 +352,6 @@ function SummonEnnemies(nbr,type_en,ennemy_spawn) -- Spawn new Ennemies
 
 			width = 3*12
 			height = 3*12
-			br = 2
 		elseif random_IA == 4 then -- Miniboss shoot
 			ENNEMY_idle = newAnimation(MINIBOSS_IDLE_ANIM_IMG, 25, 31, 0.1, 0)
 			ENNEMY_idle:setMode("loop")
@@ -359,7 +362,8 @@ function SummonEnnemies(nbr,type_en,ennemy_spawn) -- Spawn new Ennemies
 
 			width = 3*25
 			height = 3*31	
-			br = 10
+			br = 10	
+			hp = 3
 		elseif random_IA == 5 then -- Miniboss spawn
 			ENNEMY_idle = newAnimation(MINIBOSS2_IDLE_ANIM_IMG, 25, 31, 0.1, 0)
 			ENNEMY_idle:setMode("loop")
@@ -371,6 +375,7 @@ function SummonEnnemies(nbr,type_en,ennemy_spawn) -- Spawn new Ennemies
 			width = 3*25
 			height = 3*31	
 			br = 10	
+			hp = 3
 		end
 
 		local newEnnemy = {
@@ -391,6 +396,7 @@ function SummonEnnemies(nbr,type_en,ennemy_spawn) -- Spawn new Ennemies
 			path = computePathtoGoal({x = posx, y=posy},shrine),
 			praying = false,
 			bullets = {},
+			health = hp,
 
 			bullet_reload = br+math.random(0,3),
 			canShoot = true,
@@ -412,14 +418,19 @@ function SummonEnnemies(nbr,type_en,ennemy_spawn) -- Spawn new Ennemies
 end
 
 
-function Ennemy_hit(ennemy,damage,table_id)
-	score = score + 1
+function Ennemy_hit(ennemy,ennemy_table_id,damage)
+	if ennemy.health <= 1 then
+		score = score + 1*score_mult
 
-	if ennemy.praying == true then
-		shrine.being_prayed = false
+		if ennemy.praying == true then
+			shrine.being_prayed = false
+		end
+		pop_pickup_anim(ennemy.pos.x,ennemy.pos.y)
+		pop_foe_death_anim(ennemy.pos.x,ennemy.pos.y,ennemy.direction,ennemy.IA)
+		table.remove(ennemies,ennemy_table_id)
+
+		score_timer = love.timer.getTime()
+	else
+		ennemy.health = ennemy.health -1 
 	end
-	pop_pickup_anim(ennemy.pos.x,ennemy.pos.y)
-	pop_foe_death_anim(ennemy.pos.x,ennemy.pos.y,ennemy.direction,ennemy.IA)
-	table.remove(ennemies,table_id)
-
 end

@@ -138,7 +138,7 @@ function loadSound()
 end
 
 function muteSounds()
-	-- music:setVolume(0)
+	 music:setVolume(0)
 	-- coin_SFX:setVolume(0)
 	-- hitsheep_SFX:setVolume(0)
 	-- xplosion_SFX:setVolume(0)
@@ -237,7 +237,7 @@ function pop_player_death_anim(x,y,dir )
 
 	local animImg
 
-	animImg = newAnimation(PLAYER_DEATH_ANIM_IMG, 22,26, 0.1, 0)
+	animImg = newAnimation(PLAYER_DEATH_ANIM_IMG, 22,26, 0.22, 0)
 
 
 	animImg:setMode("once")

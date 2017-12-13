@@ -1,18 +1,18 @@
-﻿HEALTH_MAX = 5
+﻿HEALTH_MAX = 20
 
 function drawCrates()
 	 for i,v in ipairs(crates) do  -- Draw ceates
     	--love.graphics.rectangle("fill",v.pos.x-v.w/2,v.pos.y-v.h/2,v.w,v.h)
  		love.graphics.draw(BOX_SHADOW_IMG,v.pos.x-27,v.pos.y-30, 0, 3, 3, 0,0)
-    	if v.health == HEALTH_MAX then
+    	if v.health >= HEALTH_MAX then
  			love.graphics.draw(v.img,v.pos.x-v.w/2,v.pos.y-v.h/2, 0, 3, 3, 0,0)
- 		elseif v.health == HEALTH_MAX-1 then
+ 		elseif v.health >= 8 then
  			love.graphics.draw(v.img_d1,v.pos.x-v.w/2,v.pos.y-v.h/2, 0, 3, 3, 0,0)
-		elseif v.health == HEALTH_MAX-2 then
+		elseif v.health >= 6 then
  			love.graphics.draw(v.img_d2,v.pos.x-v.w/2,v.pos.y-v.h/2, 0, 3, 3, 0,0)
-		elseif v.health == HEALTH_MAX-3 then
+		elseif v.health >= 4 then
  			love.graphics.draw(v.img_d3,v.pos.x-v.w/2,v.pos.y-v.h/2, 0, 3, 3, 0,0)
-		elseif v.health == HEALTH_MAX-4 then
+		else 
  			love.graphics.draw(v.img_d4,v.pos.x-v.w/2,v.pos.y-v.h/2, 0, 3, 3, 0,0)
  		end
 	end
@@ -81,7 +81,7 @@ function newBox( x,y )
 			w=3*BOX_IMG:getWidth(),
 			h=3*BOX_IMG:getHeight(),
 			pos={x=posx,y=posy},
-			health = 5}
+			health = HEALTH_MAX}
 		)
 
 		pop_crate_anim(posx,posy)

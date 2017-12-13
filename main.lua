@@ -46,6 +46,10 @@ bullet_reload = 4
 
 leaderboard = {}
 score = 0
+score_mult = 1
+score_timer = love.timer.getTime()
+score_timerMax = 2 
+
 wave = 0 							-- Current wave numbering
 
 time = 0
@@ -153,18 +157,43 @@ function love.draw()
 		love.graphics.setColor(0,0,0)
 		love.graphics.print("= "..player.stack+1,CAM_X0+120+2+offsetX,CAM_Y0+15+2)
 		love.graphics.print("= "..player.crates_nbr,CAM_X0+120+2+offsetX,CAM_Y0+80+2)
+		love.graphics.print("Score = "..score,CAM_X0+5+offsetX-30,CAM_Y0+80+95+5)
+		useCustomFont(35)
+		love.graphics.print("x"..score_mult,CAM_X0+120+5+offsetX-30,CAM_Y0+155+5)
+		useCustomFont(50)
+		
 		if player.stack == 0 then
 			love.graphics.setColor(255,25,1)
 		else
 			love.graphics.setColor(255,255,255)
 		end
 		love.graphics.print("= "..player.stack+1,CAM_X0+120+offsetX,CAM_Y0+15)
+		
 		if player.crates_nbr == 0 then
 			love.graphics.setColor(255,25,1)
 		else
 			love.graphics.setColor(255,255,255)
 		end
 		love.graphics.print("= "..player.crates_nbr,CAM_X0+120+offsetX,CAM_Y0+80)
+
+		if score_mult == 1 then
+			love.graphics.setColor(255,255,255)
+		else
+			love.graphics.setColor(213,162,111)
+		end
+		useCustomFont(35)
+		love.graphics.print("x"..score_mult,CAM_X0+120+offsetX-30,CAM_Y0+155)
+		useCustomFont(50)
+
+		love.graphics.setColor(210,73,95)
+		local rect_w = 200+100*(score_timer-love.timer.getTime())
+		if (rect_w > 0 ) then
+			love.graphics.rectangle("fill",CAM_X0+2+offsetX,CAM_Y0+145+2,rect_w,16)
+		end
+
+		love.graphics.setColor(255,255,255)
+		love.graphics.print("Score = "..score,CAM_X0+offsetX-30,CAM_Y0+80+95)
+
 
 
 		if start_new_wave == true and start_new_wave_pressed == false and table.getn(ennemies) == 0 then
@@ -242,22 +271,26 @@ function love.draw()
 
 
 
-		-- for i,v in ipairs(handler.tiles) do
-			-- 	for j,w in ipairs(v) do
-			-- 		if w == 0 then
-			-- 			love.graphics.setColor(255,255,255)
-			-- 			love.graphics.circle("fill",(j-0.5)*16*3,(i-0.5)*16*3,5)
-			-- 		elseif w == 1 then
-			-- 			love.graphics.setColor(0,0,0)
-			-- 			love.graphics.circle("fill",(j-0.5)*16*3,(i-0.5)*16*3,5)
-			-- 		end
-			-- 	end
-			-- end
-		-- for i,v in ipairs(path_test) do
-		-- 	love.graphics.setColor(255,0,0)
-		-- 	love.graphics.circle("fill",(v.location.x-0.5)*16*3,(v.location.y-0.5)*16*3,5)
-		-- end
-		-- love.graphics.setColor(0,0,0)
+			for i,v in ipairs(handler.tiles) do
+				for j,w in ipairs(v) do
+					if w == 0 then
+						love.graphics.setColor(255,255,255)
+						love.graphics.circle("fill",(j-0.5)*16*3,(i-0.5)*16*3,5)
+					elseif w == 1 then
+						love.graphics.setColor(0,0,0)
+						love.graphics.circle("fill",(j-0.5)*16*3,(i-0.5)*16*3,5)
+					end
+				end
+			end
+			for i,v in ipairs(path_test) do
+				love.graphics.setColor(255,0,0)
+				love.graphics.circle("fill",(v.location.x-0.5)*16*3,(v.location.y-0.5)*16*3,5)
+			end
+			love.graphics.setColor(0,0,0)
+
+
+			love.graphics.setColor(0,0,0)
+			love.graphics.circle("fill",love.mouse.getX() + CAM_X0,love.mouse.getY() + CAM_Y0,5)
 
 		end
 
@@ -425,6 +458,12 @@ function love.update(dt)
 	time = time+5*dt
 	if time > 2*math.pi then
 		time = 0
+	end
+
+	if love.timer.getTime()-score_timer < score_timerMax then
+		score_mult = 1.5
+	else
+		score_mult = 1
 	end
 
 	if LOSE == false then

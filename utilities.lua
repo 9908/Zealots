@@ -6,7 +6,7 @@ function love.mousepressed(loc_x, loc_y, button)
 		if button == 1 then -- shoot
 
 			AUTO_SHOOT = true
-
+			player.weapon.timerAutoShoot = love.timer.getTime()
 			-- local startX = player.pos.x
 			-- local startY = player.pos.y
 			-- local mouseX = loc_x + CAM_X0
@@ -62,6 +62,9 @@ function love.keypressed (key)
    		if (GAME_STATE == "START_MENU" or GAME_STATE == "LOSE") then
    			restartGame()
    		end
+	end
+	if key == 'm' then
+   		muteSounds()
 	end
 	if debug then
 		if key == 'b' then

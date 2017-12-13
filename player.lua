@@ -47,7 +47,7 @@ function playerShoot()
 			local mouseX = love.mouse.getX() + CAM_X0
 			local mouseY = love.mouse.getY() + CAM_Y0
 			local ii = i - player.weapon.nbr_bullet/2
-			local angle = math.atan2((mouseY - startY), (mouseX - startX)) + (ii)*math.pi/32
+			local angle = math.atan2((mouseY - startY), (mouseX - startX)) - (player.weapon.nbr_bullet-1)*math.pi/64 + (i-1)*math.pi/32
 
 			local bulletDx = 2.5*bulletSpeed * math.cos(angle)
 			local bulletDy = 2.5*bulletSpeed * math.sin(angle)
@@ -127,10 +127,10 @@ function updatePlayer(dt)
 		for j,w in ipairs(ennemies) do
 			if Point_Rectangle_CollisionCheck(v.pos.x,v.pos.y,w.pos.x,w.pos.y,w.w,w.h) then
 				if start_new_wave == true then
-					Ennemy_hit(w,1,j)
+					Ennemy_hit(w,j,1)
 					pop_hit_anim(v.pos.x-11,v.pos.y-11/2,v.vit.x,v.vit.y)
-					table.remove(player.bullets,i)
 				end
+				table.remove(player.bullets,i)
 
 			end
 		end
