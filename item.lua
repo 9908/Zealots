@@ -65,31 +65,23 @@ end
 
 function getRandomLocation()
 	local location = {}
-	local randomX = -CAM_X0 + math.random(screenWidth+2*CAM_X0)
-	local randomY = -CAM_Y0 + math.random(screenHeight+2*CAM_Y0)
-	local index_i = math.floor(randomX/TILE_W)+1
-	local index_j = math.floor(randomY/TILE_H)+1
-
+	local randomX = math.random(screenWidth+2*CAM_X0)
+	local randomY = math.random(screenHeight+2*CAM_Y0)
 	location = {x=randomX,y=randomY}
-	while checkOccupiedSpot(index_i, index_j)  do
+
+	local index_i = math.floor(randomX/TILE_W)
+	local index_j = math.floor(randomY/TILE_H)
+
+
+	while checkOccupiedSpot(index_i,index_j)  do
+
+		randomX = math.random(screenWidth+2*CAM_X0)
+		randomY = math.random(screenHeight+2*CAM_Y0)
+
 		location = {x=randomX,y=randomY}
 
-		randomX = -CAM_X0 + math.random(screenWidth+2*CAM_X0)
-		randomY = -CAM_Y0 + math.random(screenHeight+2*CAM_Y0)
-
-		if randomX >= screenWidth then -- trop à droite
-			randomX = screenWidth+CAM_X0
-		elseif randomX < CAM_X0 then -- trop à gauche
-			randomX = CAM_X0
-		end
-		if randomY >= screenHeight then -- trop bas
-			randomY = screenHeight+CAM_Y0
-		elseif randomY < CAM_Y0 then
-			randomY = CAM_Y0
-		end
-
-		index_i = math.floor(randomX/TILE_W)+1
-		index_j = math.floor(randomY/TILE_H)+1
+		index_i = math.floor(randomX/TILE_W)
+		index_j = math.floor(randomY/TILE_H)
 	end
 
 	return location
