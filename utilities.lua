@@ -63,6 +63,18 @@ function love.keypressed (key)
    			restartGame()
    		end
 	end
+	if key == 'p' then
+   		paused_game = true
+	end
+	if key == 'o' then
+   		paused_game = false
+	end
+	if key == 'l' then
+   		debug = true
+	end
+	if key == 'k' then
+   		debug = false
+	end
 	if key == 'm' then
    		muteSounds()
 	end

@@ -25,6 +25,7 @@ require ("middleclass")
 
 
 debug =  false
+paused_game = false
 
 GAME_STATE = "START_MENU" -- START_MENU, PLAY - LOSE - WIN
 SHOW_GRID = false
@@ -476,6 +477,7 @@ function love.update(dt)
 
 	txt_size = 40 + 10*math.sin(time)
 	if GAME_STATE == "PLAY" then
+		if paused_game == false then
 		updateShrine(dt)
 		updatePlayer(dt)
 		updateCrates(dt)
@@ -486,6 +488,7 @@ function love.update(dt)
 		updateFX(dt)
 
 		camera:update(dt)
+		end
 		--camera:setPosition( player.pos.x , player.pos.y )
 	elseif GAME_STATE == "START_MENU" or GAME_STATE == "LOSE" then
 		MASK_ANIM:update(dt)
